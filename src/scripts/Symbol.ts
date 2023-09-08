@@ -1,16 +1,47 @@
-import { Sprite, Texture } from "pixi.js"
+import { Sprite, Texture, Text } from 'pixi.js';
+import { Globals, boardConfigVar } from './Globals';
+import { log } from 'console';
+import { Easing, Tween } from '@tweenjs/tween.js';
+import { lerp } from './Utilities';
+import TWEEN from '@tweenjs/tween.js';
 
 export class Symbol extends Sprite
 {
     symbol : string = "-1";
 
-    constructor(symbolSprite : Texture | undefined,scale : number)
+    constructor(scale : number,symbol: string,position :{x: number, y :number})
     {
-      super(symbolSprite);
-
+      let char = `Char${symbol}`;
+      super(Globals.resources[char].texture);
+      
       this.anchor.set(0.5);
       this.scale.set(scale);
-
-
+      this.symbol = symbol;
+      this.position.x = position.x;
+      this.position.y = position.y;
     }
+
+ 
+
+    tweenToSlot(ypos : number, pos : boolean )
+    {
+      let newPos  = this.position.y + ypos;
+      if(!pos)
+      {
+        const tween = new Tween(this)
+        .to({y : newPos},500)
+        .easing(Easing.Back.InOut)
+        .start();
+      }
+      else 
+      {
+        const tween = new Tween(this)
+        .to({y : newPos},500)
+        .easing(Easing.Back.In)
+        .onComplete(()=>{boardConfigVar.shouldMove = true})
+        .start();
+      }
+    
+    }
+
 }

@@ -44,13 +44,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AitaTechnologies/StackThree.git"
+    "url": ""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AitaTechnologies/StackThree/issues"
+    "url": "https://github.com"
   },
-  "homepage": "https://github.com/AitaTechnologies/StackThree#readme"
+  "homepage": ""
 }

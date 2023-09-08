@@ -1,11 +1,12 @@
-import { Container, Sprite } from "pixi.js";
-import { Globals, boardConfigVar } from "./Globals";
+import { Container, Sprite, Resource } from 'pixi.js';
+import { Globals, boardConfigVar, randomRange } from "./Globals";
 import { TextLabel } from "./TextLabel";
 import { log } from 'console';
 import { Easing, Tween } from "@tweenjs/tween.js";
 
 export class UiContainer extends Container
 {
+    spin : Sprite;
     constructor()
     {
         super();
@@ -25,25 +26,17 @@ export class UiContainer extends Container
         Bottom.addChild(bottomText);
         this.addChild(Bottom);
 
-        const spin = new Sprite(Globals.resources.Sprint.texture);
-        spin.anchor.set(0.5);
-        spin.scale.set(0.2);
-        spin.position.x = 300;
-        spin.position.y = Bottom.position.y - Bottom.height/1.5;
-        this.addChild(spin);
-        spin.interactive = true;
+        this.spin = new Sprite(Globals.resources.Sprint.texture);
+        this.spin.anchor.set(0.5);
+        this.spin.scale.set(0.2);
+        this.spin.position.x = 300;
+        this.spin.position.y = Bottom.position.y - Bottom.height/1.5;
+        this.addChild(this.spin);
+        this.spin.interactive = true;
 
-        spin.on("pointerdown",()=>
+        this.spin.on("pointerdown",()=>
         {
-            spin.interactive = false;
-            const tween = new Tween(spin.scale)
-            .to({ x : 0.23, y: 0.23 }, 100)
-            .easing(Easing.Back.InOut)
-            .yoyo(true)
-            .repeat(1)
-            .onComplete(()=>{spin.interactive = true;})
-            .start();
-            
+           this.callSpin();
         })
 
         const betText = new TextLabel(0, 0, 0.5, `Bet  :  ${boardConfigVar.Bet}`, 100, 0xFFC0CB );
@@ -54,5 +47,17 @@ export class UiContainer extends Container
         const coinText = new TextLabel(0, 0, 0.5, `Bet  :  ${boardConfigVar.Coins}`, 100, 0xFFC0CB );
         coinText.position.x = Bottom.width;
         Bottom.addChild(coinText);  
+    }
+    callSpin()
+    {
+        Globals.emitter?.Call("startSpin");
+        let time = randomRange(boardConfigVar.seconds)+ 500;
+        setTimeout(()=>{boardConfigVar.shouldMove = false; Globals.emitter?.Call("CallCheckSlot")},time);
+        setTimeout(()=>{this.spin.interactive = true;},time+500)
+        this.spin.interactive = false;
+        const tween = new Tween(this.spin.scale)
+        .to({ x : 0.23, y: 0.23 }, 100) .easing(Easing.Back.InOut)  .yoyo(true) .repeat(1) .onComplete(()=>{}) .start();
+
+        // setTimeout(()=>{this.callSpin()},10000)
     }
 }

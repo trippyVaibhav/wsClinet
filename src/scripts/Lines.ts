@@ -1,6 +1,7 @@
 import { Graphics } from "pixi.js";
 import { boardConfigVar } from './Globals';
 import { log } from "console";
+import { Button } from "./Button";
 
 export class Lines extends Graphics{
  
@@ -8,12 +9,16 @@ export class Lines extends Graphics{
     linePos !: {x : number,y : number}[] ;
     moveLine !: Graphics;
     colorCode : number = 0x000000;
+    side : boolean = false;
+
+    
 
 
     // false Side = LEFT  AND True Side = Right
-    constructor(color: string, Side:boolean, payLineNo : number, yPosition : number )
+    constructor(color: string, Side:boolean, payLineNo : number, yPosition : number,lineLocaitons :{x:number, y:number}[] )
     {
         super();
+        
         this.colorCode = parseInt(color);
         this.lineG = new Graphics;
         this.lineG.beginFill(this.colorCode, 1);
@@ -21,64 +26,46 @@ export class Lines extends Graphics{
         this.lineG.drawCircle(0,0,20);
         this.lineG.endFill();
         this.addChild(this.lineG);
-
         this.lineG.position.y = yPosition;
+        this.side = Side;
+        this.lineG.zIndex = 1;
 
-        if(Side == true )
+        if( this.side == true )
         {
             this.lineG.position.x = boardConfigVar.boardBoxWidth*boardConfigVar.Matrix.x + this.lineG.width/2;
         }
-       
-        // button.lineTo(boardConfigVar.boardBoxWidth, 60);
-        // this.addChild(button)
-        // button.moveTo(boardConfigVar.boardBoxWidth, 60);
-        // button.lineTo(boardConfigVar.boardBoxWidth*2, 60);
-        // button.moveTo(boardConfigVar.boardBoxWidth*2, 60);
-        // button.lineTo(boardConfigVar.boardBoxWidth*4, 60);
-        // button.moveTo(boardConfigVar.boardBoxWidth*3, 60);
-        // button.lineTo(boardConfigVar.boardBoxWidth*5, 60);
-       
-        // const button = new Graphics;
-        
-        // button.beginFill(parseInt(color), 1);
-        // button.drawRoundedRect(0,-5,-500,10,1);
-        // button.endFill();
-
-        // button.beginFill(parseInt(color), 1);
-        // button.drawRoundedRect(-500,-5,-500,10,1);
-        // button.endFill();
-
-
-        // this.lineG.addChild(button)
-
+        this.makeLines(lineLocaitons);
     }
+
 
     makeLines(line :{x:number, y:number}[])
     {
         const button = new Graphics;
-        button.lineStyle(11, this.colorCode, 1)
+        button.lineStyle(10, this.colorCode, 1);
+        button.zIndex = 0;
        for(let i = 0 ; i < line.length ; i++)
        {
-        // boardConfigVar.boardPosY
-            console.log((65 - line[i].y));
+        // console.log( "LinePos: " +  (line[i].y  + boardConfigVar.boardBoxHeight/2));
+        // console.log( "GraphicPos: " + Math.abs(this.lineG.position.y ));
+        // console.log( "rightPos: " +  ((line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y ) ));
+        // console.log( this.lineG.position.y - (line[i].y + boardConfigVar.boardBoxHeight/2));
+       if(!this.side)
+       {
+           const rightPos = (line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y);
+           
+           button.lineTo(line[i].x  + boardConfigVar.boardBoxWidth/2+1.5 + 10,rightPos +1.5 );
+           button.moveTo(line[i].x + boardConfigVar.boardBoxWidth/2 + 10 , rightPos);
+        }
+        else
+        {
+            console.log(line[i].x);
             
-            button.lineTo(line[i].x,line[i].y);
-            button.moveTo(line[i].x,line[i].y);
-       }
-        this.addChild(button);
+            const rightPos = (line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y);
+            button.lineTo(line[i].x  - boardConfigVar.boardBoxWidth/2+1.5 + 10,rightPos +1.5 );
+            button.moveTo(line[i].x - boardConfigVar.boardBoxWidth/2 + 10 , rightPos);
+         }
+        }
+        this.lineG.addChild(button);
     }
    
 }
-//   // button.beginFill(parseInt(color), 1);
-//             // button.drawRoundedRect(0,-5,-500,10,1);
-//             // button.endFill();
-
-//             button.beginFill(this.colorCode, 1);
-//             button.drawRoundedRect(0,-5,-500,10,1);
-//             button.endFill();
-
-//             let x = new Graphics;
-//             x.beginFill(0x00000,1)
-//             x.drawCircle(line[i].x,line[i].y,10);
-//             x.endFill();
-//             this.addChild(x);

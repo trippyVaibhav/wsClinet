@@ -2,7 +2,12 @@ export const LoaderConfig = {
 backGround : require("../sprites/BG.png"),
 Bottom : require("../sprites/Bottom.png"),
 Sprint : require("../sprites/Sprint.png"),
-gSymbol : require("../sprites/GREEN.png"),
+Char0 :  require("../sprites/GREEN.png"),
+Char1 :  require("../sprites/RED.png"),
+Char2 :  require("../sprites/BLUE.png"),
+Char3 :  require("../sprites/PINK.png"),
+Char4 :  require("../sprites/YELLOW.png"),
+
 
 
 

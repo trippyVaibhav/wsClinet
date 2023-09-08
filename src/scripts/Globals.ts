@@ -33,46 +33,64 @@ export const Globals: globalDataType = {
 };
 
 export const boardConfigVar =  {
- boardBoxWidth : 0,
- boardBoxHeight : 0,
- Matrix : {x : 5, y : 3},
- slotArr : [],
- maxLines : 1,
- boardPosY : 0,
- score : 0,
- Bet : 5,
- Coins : 100, 
+  boardBoxWidth : 0,
+  boardBoxHeight : 0,
+  Matrix : {x : 5, y : 3},
+  slotArr : [],
+  maxLines : 1,
+  boardPosY : 0,
+  score : 0,
+  Bet : 5,
+  Coins : 100, 
+  startPos : -815 ,
+  restartPos : 650,
+  shouldMove : false,
+  seconds :5000,
 }
 
-export const getLineinfo = {
+export const getLineinfo : any = {
   
   0 : {
     color : "0xFF0000",
-    locations : [[0,0],[0,1],[0,2],[0,2]],
+    locations : [[0,0],[0,1],[0,2],[0,3],[0,4]],
     xPos : false,
-    yPos: 0
-  },
+    yPos: 10,
+    payScale : 10,
+  }, 
   1 : {
-    color : "0x00000",
-    locations : [[1,1],[1,2],[1,3],[1,4],[1,5]],
-    xPos : false,
-    yPos: 20
-  }
+    color : "0xFF0000",
+    locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],
+    xPos : true,
+    yPos: 250,
+    payScale : 10,
+  }, 
 }
 
+export const slotCharArr = {
+  charArr : [['1',"2","1","3","2","0","2","2","1"],
+             ['1',"2","1","2","3","0","1","2","1"],
+             ['3',"2","1","3","2","0","2","1","1"],
+             ['4',"1","2","1","3","0","1","2","3"],
+             ['4',"1","1","1","2","0","1","1","1"],
+            ]
+} 
+
+export const slotCharInfo = (slotChar : string) => {
+  if(slotChar == "0") return 10;
+  if(slotChar == "1") return 20;
+  if(slotChar == "2") return 30;
+  if(slotChar == "3") return 40;
+  if(slotChar == "4") return 50;
+
+}
 
 export const boardConfig = () => {
-  
   if(boardConfigVar.Matrix.x == 5 && boardConfigVar.Matrix.y == 3) return [180,150];
   if(boardConfigVar.Matrix.x == 5 && boardConfigVar.Matrix.y == 4) return [300,150];
   if(boardConfigVar.Matrix.x == 3 && boardConfigVar.Matrix.y == 3) return [250,150];
   if(boardConfigVar.Matrix.x == 4 && boardConfigVar.Matrix.y == 3) return [250,150];
 
-
-
-  
   else console.log("This Matrix Not Found"); return [0,0];
-  
 }
 
 
@@ -127,7 +145,7 @@ export function weightedRand(spec: any) {
 }
 
 export function randomRange(max: number): number {
-  let rNumber = Math.floor(Math.random() * (max - 1)) + 1;
+  let rNumber = Math.floor(Math.random() * (max - 2000)) + 2000;
   return rNumber;
 }
 export function GetColorCode(colorId: any) {

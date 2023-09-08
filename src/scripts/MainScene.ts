@@ -15,12 +15,11 @@ export class MainScene extends Scene {
 	
 		super();
 	
-		this.board = new CreateBoard();
+		
 		this.UiContainer = new UiContainer();
-
+		this.board = new CreateBoard();
+		
 		this.mainContainer.addChild(this.board,this.UiContainer);
-
-        
 	}
 
 
@@ -31,16 +30,21 @@ export class MainScene extends Scene {
 	
 	}
 
-	update(dt: number): void {
-		// throw new Error('Method not implemented.');
+	update(dt: number): void // throw new Error('Method not implemented.');
+	{     
 
-		
-	}
-	recievedMessage(msgType: string, msgParams: any): void {
-		// throw new Error('Method not implemented.');
-
+		this.board.update(dt);
 	
-		
+	}
+
+	recievedMessage(msgType: string, msgParams: any): void  // throw new Error('Method not implemented.');
+	{
+		if(msgType == "CallCheckSlot")
+			this.board.checkSlot(); 
+
+
+		if(msgType == "startSpin")
+		this.board.startSpin();
 	}
 	
 }
