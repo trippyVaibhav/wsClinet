@@ -49,8 +49,6 @@ export class CreateBoard extends Graphics
         this.addSlots();
         this.makeLines();
         this.addChar();
-        console.log (this.slotArr[2][0].slot.position.y)
-        
     }
 
     addSlots()
@@ -81,19 +79,20 @@ export class CreateBoard extends Graphics
     {
        let xPos = boardConfigVar.boardBoxWidth/2 ;
        let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.width/2.5 ;
-
-      for(let i =0 ;  i < slotCharArr.charArr.length ; i ++)
+        
+       const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
+      for(let i =0 ;  i < shuffledArray.length ; i ++)
         {
             this.slotChar[i] = []; 
             
-            for(let j = slotCharArr.charArr[0].length-1; j >=0 ; j--)
+            for(let j =shuffledArray[0].length-1; j >=0 ; j--)
             {
-                let char = new Symbol(0.02,slotCharArr.charArr[i][j],{x: xPos, y: yPos});
+                let char = new Symbol(0.02,shuffledArray[i][j],{x: xPos, y: yPos});
                 yPos = yPos - boardConfigVar.boardBoxHeight;
                 char.position.x = char.position.x;
                 this.slotChar[i][j] = char;
                 this.slotChar[i][j].mask = this.charMask;
-                // this.board.addChild(char);
+                this.board.addChild(char);
             }
             xPos += boardConfigVar.boardBoxWidth  ;
             yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.width/2.5;
@@ -106,8 +105,7 @@ export class CreateBoard extends Graphics
     {
    
         const entries = Object.entries(getLineinfo);
-      
-        for(let i = 0; i < entries[0].length ; i++)
+        for(let i = 0; i < entries.length ; i++)
         {
             let lineInfo;
 
@@ -166,58 +164,35 @@ export class CreateBoard extends Graphics
     {
         let x ;
         
-   console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
+//         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
    
         for(let i = 0 ; i < this.slotChar[0].length ; i++)
         {
-       if( this.slotChar[0][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.width*0.5 
-        && this.slotChar[0][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.width*1.5 ) 
-       {
-          if(x == undefined)
-          this.addOnSlot(i)
-       }
-      
-           
+            if( this.slotChar[0][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.width*0.5 
+                && this.slotChar[0][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.width*1.5 ) 
+            {
+               if(x == undefined)
+               this.addOnSlot(i)
+            }
         }
-        this.checkWinPaylines();
-
         ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
     }
 
     addOnSlot(winningIndex : number)
     {
-        // yPos - boardConfigVar.boardBoxHeight
-        // let yPos = ((this.slotArr[0][0].slot.position.y + this.slotArr[0][0].slot.width/2)- this.slotChar[0][0].position.y- 20);
-        // console.log(this.slotArr.length-1);
-        
-        
-        //    let index = winningIndex - i;
-        
-        //    if(index <0)
-        //    index = 9 - i;
-        
-        //    console.log("winning Index : "+ winningIndex);
-        
-        //    console.log("Indexxx : "+ index);
-        
-        
-            // console.log("winning Pos ball" + this.slotChar[0][winningIndex].position.y);
-            // console.log("Arr slot pos " + this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2);
-            // console.log(this.slotArr[0].length,this.slotArr.length);
-            
+        for(let  j = 0 ; j  <  this.slotArr.length ; j++)
+        {
             for(let  i = 0 ; i < this.slotArr[0].length; i++)
             {
-                for(let  j = 0 ; j < this.slotArr.length; j++)
-                {
-                    let index = winningIndex - j;
-                    
-                    if(index <0)
-                    index = 9 - j;
                 
+                let index = (winningIndex -( this.slotArr.length-1))+j;
+                
+                if(index < 0)
+                index = 8-j;
                 this.slotArr[j][i].currentSlotSymbol = this.slotChar[i][index].symbol;
             }
         }
-        
+
         let yPos : number;
         yPos = this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.1 - this.slotChar[0][winningIndex].position.y;
         
@@ -226,11 +201,11 @@ export class CreateBoard extends Graphics
             for(let j = 0; j  < slotCharArr.charArr[0].length ; j++)
             {
                 this.slotChar[i][j].tweenToSlot(yPos,false)
-                
             }
         }
         //    this.getSlotCurrentSymbols(); 
         // For checking
+        this.checkWinPaylines();
         
     }
     startSpin()
@@ -243,38 +218,40 @@ export class CreateBoard extends Graphics
             }
         }
     }
+
     checkWinPaylines()
     {
         const entries = Object.entries(getLineinfo);
         let points  = 0;
-        for(let i = 0; i < entries[0].length ; i++)
+        for(let i = 0; i < entries.length ; i++)
         {
             let  lineInfo = getLineinfo[i]; 
-            let x; 
+            let lastSymbol = undefined; 
           for(let j = 0; j < lineInfo.locations.length ; j ++)
           {
             let xIndex =lineInfo.locations[j][0];
             let yIndex =lineInfo.locations[j][1]; 
             
-           console.log("xIndex  : " + xIndex + "yIndex  : " + yIndex);
+        //    console.log("xIndex  : " + xIndex + "yIndex  : " + yIndex);
+        //    console.log("Last Symbol : " + lastSymbol + "Current Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol);
+           if(lastSymbol == undefined)
+           lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
 
-           if(x != this.slotArr[xIndex][yIndex].currentSlotSymbol)
-           break;
-
-           if(!x)
-           x = this.slotArr[xIndex][yIndex].currentSlotSymbol;
-
-            if(x != undefined && x == this.slotArr[xIndex][yIndex].currentSlotSymbol)
+           if(lastSymbol && lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol)
+           {
+            //    console.log( "Same " + this.slotArr[xIndex][yIndex].currentSlotSymbol); 
+               points++;
+           }
+            else
             {
-                console.log( " Old Symbol " + x + "New Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol); 
-                points++;
-                continue;
+                if(points == 1)
+                points--;
+                // console.log("not same ");
+                break;
             }
           }
         }
-console.log("points" + points);
-
-      
+        console.log("points : " + points);
     }
 
 
@@ -282,13 +259,16 @@ console.log("points" + points);
     {
         for(let i = 0 ; i < boardConfigVar.Matrix.y; i++)
         {
-            for(let j = 0; j <  boardConfigVar.Matrix.x; j++)
+            for(let j = 0; j <  boardConfigVar.Matrix.x ; j++)
             { 
-                console.log( "Symbol " + this.slotArr[i][j].currentSlotSymbol );
+                // console.log( "Symbol " + this.slotArr[i][j].currentSlotSymbol );
+                console.log(i,j);
+                
             }
         }
 
     }
+
     clearCurrentSort()
     {
         for(let i = 0 ; i < boardConfigVar.Matrix.y; i++)
@@ -299,6 +279,22 @@ console.log("points" + points);
                 // console.log( "Symbol " + this.slotArr[i][j].currentSlotSymbol );
             }
         }
-
     }
+
+    shuffle2DArray(array: string[][]): string[][] {
+        const rows: number = array.length;
+        const cols: number = array[0].length;
+      
+        for (let i = rows - 1; i > 0; i--) {
+          for (let j = cols - 1; j > 0; j--) {
+            const i1: number = Math.floor(Math.random() * (i + 1));
+            const j1: number = Math.floor(Math.random() * (j + 1));
+      
+            // Swap elements at (i, j) and (i1, j1)
+            [array[i][j], array[i1][j1]] = [array[i1][j1], array[i][j]];
+          }
+        }
+      
+        return array;
+      }
 }

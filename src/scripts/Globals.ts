@@ -57,13 +57,13 @@ export const getLineinfo : any = {
     yPos: 10,
     payScale : 10,
   }, 
-  1 : {
-    color : "0xFF0000",
-    locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],
-    xPos : true,
-    yPos: 250,
-    payScale : 10,
-  }, 
+  // 1 : {
+  //   color : "0xFF0000",
+  //   locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],
+  //   xPos : true,
+  //   yPos: 250,
+  //   payScale : 10,
+  // }, 
 }
 
 export const slotCharArr = {
