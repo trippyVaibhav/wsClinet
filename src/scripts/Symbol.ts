@@ -8,6 +8,7 @@ import TWEEN from '@tweenjs/tween.js';
 export class Symbol extends Sprite
 {
     symbol : string = "-1";
+    shouldMove :boolean =  false;
 
     constructor(scale : number,symbol: string,position :{x: number, y :number})
     {
@@ -28,6 +29,7 @@ export class Symbol extends Sprite
       let newPos  = this.position.y + ypos;
       if(!pos)
       {
+        this.shouldMove = false;
         const tween = new Tween(this)
         .to({y : newPos},500)
         .easing(Easing.Back.InOut)
@@ -38,7 +40,7 @@ export class Symbol extends Sprite
         const tween = new Tween(this)
         .to({y : newPos},500)
         .easing(Easing.Back.In)
-        .onComplete(()=>{boardConfigVar.shouldMove = true})
+        .onComplete(()=>{this.shouldMove = true})
         .start();
       }
     

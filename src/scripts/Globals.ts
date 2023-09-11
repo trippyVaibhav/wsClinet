@@ -44,8 +44,8 @@ export const boardConfigVar =  {
   Coins : 100, 
   startPos : -815 ,
   restartPos : 650,
-  shouldMove : false,
   seconds :5000,
+  canMove : true,
 }
 
 export const getLineinfo : any = {

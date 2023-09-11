@@ -52,8 +52,6 @@ export class UiContainer extends Container
     {
         Globals.emitter?.Call("startSpin");
         let time = randomRange(boardConfigVar.seconds)+ 500;
-        setTimeout(()=>{boardConfigVar.shouldMove = false; Globals.emitter?.Call("CallCheckSlot")},time);
-        setTimeout(()=>{this.spin.interactive = true;},time+500)
         this.spin.interactive = false;
         const tween = new Tween(this.spin.scale)
         .to({ x : 0.23, y: 0.23 }, 100) .easing(Easing.Back.InOut)  .yoyo(true) .repeat(1) .onComplete(()=>{}) .start();

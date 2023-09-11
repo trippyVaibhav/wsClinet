@@ -1,6 +1,6 @@
 import { Graphics } from "pixi.js";
 import * as PIXI from 'pixi.js';
-import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr } from './Globals';
+import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals } from './Globals';
 import { Lines } from "./Lines";
 import { Slots } from './Slots';
 import { get } from "http";
@@ -142,10 +142,9 @@ export class CreateBoard extends Graphics
         {
             for(let j = slotCharArr.charArr[0].length-1; j >=0 ; j--)
             {
-                if(boardConfigVar.shouldMove)
+                if(this.slotChar[i][j].shouldMove)
                 {
                     this.slotChar[i][j].position.y += 20*dt;
-
                     if( this.slotChar[i][j].position.y > boardConfigVar.restartPos)
                     {
                         if(j != 8 )
@@ -162,52 +161,64 @@ export class CreateBoard extends Graphics
 
     checkSlot()
     {
-        let x ;
         
-//         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
-   
-        for(let i = 0 ; i < this.slotChar[0].length ; i++)
+        //         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
+        console.log(this.slotChar.length);
+        
+      for(let j = 0 ; j < this.slotChar.length ; j++)
         {
-            if( this.slotChar[0][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.width*0.5 
-                && this.slotChar[0][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.width*1.5 ) 
-            {
-               if(x == undefined)
-               this.addOnSlot(i)
-            }
-        }
-        ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
-    }
 
-    addOnSlot(winningIndex : number)
+        setTimeout(()=>{
+            for(let i = 0 ; i < this.slotChar[0].length ; i++)
+            {
+            let x ;
+            
+            if( this.slotChar[j][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.height*0.5 
+                && this.slotChar[j][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5 ) 
+                {
+                    this.addOnSlot(i,j)
+                }
+                else if(this.slotChar[j][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.height
+                    && this.slotChar[j][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.height*2)
+                {
+                    this.addOnSlot(i,j)
+                }
+            }
+        },1000*(j+1))
+        }
+    }
+        ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
+    
+
+    addOnSlot(winningIndex : number, rowNumber : number)
     {
+        console.log("Row Number :  "+ rowNumber + "winningIndex  : "+ winningIndex);
         for(let  j = 0 ; j  <  this.slotArr.length ; j++)
         {
-            for(let  i = 0 ; i < this.slotArr[0].length; i++)
-            {
-                
-                let index = (winningIndex -( this.slotArr.length-1))+j;
-                
-                if(index < 0)
-                index = 8-j;
-                this.slotArr[j][i].currentSlotSymbol = this.slotChar[i][index].symbol;
-            }
+            let index = (winningIndex -( this.slotArr.length-1))+(j+1);
+            console.log("Index  :  "+ index);
+            
+            if(index > 8)
+            index =  (index-9);
+
+            console.log(this.slotChar[rowNumber][index].symbol);
+            this.slotArr[j][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
         }
 
         let yPos : number;
-        yPos = this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.1 - this.slotChar[0][winningIndex].position.y;
-        
-        for(let i = 0 ;  i <= slotCharArr.charArr.length-1 ; i ++ )
+        yPos = this.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5 - this.slotChar[rowNumber][winningIndex].position.y;
+        for(let j = 0; j  < slotCharArr.charArr[0].length ; j++)
         {
-            for(let j = 0; j  < slotCharArr.charArr[0].length ; j++)
+            this.slotChar[rowNumber][j].tweenToSlot(yPos,false);
+            if(rowNumber == boardConfigVar.Matrix.x-1 && j == slotCharArr.charArr[0].length-1)
             {
-                this.slotChar[i][j].tweenToSlot(yPos,false)
+                setTimeout(()=>{Globals.emitter?.Call("CanSpinNow")},1500);
+                this.checkWinPaylines();
+               this.getSlotCurrentSymbols(); 
             }
         }
-        //    this.getSlotCurrentSymbols(); 
-        // For checking
-        this.checkWinPaylines();
-        
     }
+
     startSpin()
     {
         for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )
@@ -217,6 +228,9 @@ export class CreateBoard extends Graphics
             this.slotChar[i][j].tweenToSlot(200,true);
             }
         }
+        setTimeout(()=>{this.checkSlot(); console.log("called Check Slot");
+        },2000);
+
     }
 
     checkWinPaylines()
@@ -261,12 +275,10 @@ export class CreateBoard extends Graphics
         {
             for(let j = 0; j <  boardConfigVar.Matrix.x ; j++)
             { 
-                // console.log( "Symbol " + this.slotArr[i][j].currentSlotSymbol );
+                console.log( "Symbol " + this.slotArr[i][j].currentSlotSymbol );
                 console.log(i,j);
-                
             }
         }
-
     }
 
     clearCurrentSort()

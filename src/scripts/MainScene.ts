@@ -39,12 +39,12 @@ export class MainScene extends Scene {
 
 	recievedMessage(msgType: string, msgParams: any): void  // throw new Error('Method not implemented.');
 	{
-		if(msgType == "CallCheckSlot")
-			this.board.checkSlot(); 
-
 
 		if(msgType == "startSpin")
 		this.board.startSpin();
+
+		if(msgType == "CanSpinNow")
+		this.UiContainer.spin.interactive = true;
 	}
 	
 }
