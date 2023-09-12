@@ -14,9 +14,9 @@ export class Slots extends Graphics {
 
         this.slot = new Graphics;
         this.slot.beginFill(0xffffff);
-        this.slot.lineStyle(5,0x00000,0.4);
+        // this.slot.lineStyle(5,0x00000,0.4);
         this.slot.drawRect(0,0,boardConfigVar.boardBoxWidth,boardConfigVar.boardBoxHeight);
-        this.slot.alpha = 1;
+        this.slot.alpha = 0.2;
         
         this.slot.position.x = position.x;
         this.slot.position.y = position.y;

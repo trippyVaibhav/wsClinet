@@ -11,7 +11,6 @@ export class MyEmitter //extends PIXI.utils.EventEmitter
     Call(msgType: string, msgParams = {}) {
         if (msgType != "timer" && msgType != "turnTimer")
             // console.log(`Emitter Called : ${msgType}`);
-
             SceneManager.instance!.recievedMessage(msgType, msgParams);
     }
 

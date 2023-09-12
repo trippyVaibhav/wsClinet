@@ -4,8 +4,10 @@ import { Globals } from "./Globals";
 // import { onResizeFunction } from "./HtmlHandler";
 import { Loader } from "./Loader";
 import { MainScene } from "./MainScene";
+import { Axios } from 'axios';
 import { MyEmitter } from "./MyEmitter";
 import { SceneManager } from "./SceneManager";
+import { getPlayerCredit } from "./ApiPasser";
 // import { Loader } from "./Loader";
 // import { SceneManager } from "./SceneManager";
 // import { MainScene } from "./MainScene";
@@ -45,7 +47,7 @@ export class App {
 			if (this.isDeviceOrientationChanged) {
 				// this.isDeviceOrientationChanged = false;
 				document.body.removeChild(this.app.view);
-                console.log("Removed Canvas from DOM");
+                // console.log("Removed Canvas from DOM");
 			}
 
 			CalculateScaleFactor();
@@ -61,12 +63,13 @@ export class App {
 			if (this.isDeviceOrientationChanged) {
 				document.body.append(this.app.view);
 				this.isDeviceOrientationChanged = false;
-                console.log("Added Canvas to DOM");
+                // console.log("Added Canvas to DOM");
 			}
 		};
 
 		//Created Emitter
 		Globals.emitter = new MyEmitter();
+
 
 		//Create Scene Manager
 		new SceneManager();

@@ -1,12 +1,15 @@
 import { Container, Sprite, Resource } from 'pixi.js';
-import { Globals, boardConfigVar, randomRange } from "./Globals";
+import { Globals, boardConfigVar, moneyInfo, randomRange } from "./Globals";
 import { TextLabel } from "./TextLabel";
 import { log } from 'console';
 import { Easing, Tween } from "@tweenjs/tween.js";
+import { assignPlayerBet, getPlayerCredit } from './ApiPasser';
 
 export class UiContainer extends Container
 {
     spin : Sprite;
+    balanceText : TextLabel;
+    wonAmountText: TextLabel;
     constructor()
     {
         super();
@@ -15,15 +18,15 @@ export class UiContainer extends Container
         Bottom.anchor.set(0.5);
         Bottom.scale.set(0.4);
         // Bottom.position.set(window.innerWidth-Bottom.width,500);
-        Bottom.position.x = window.innerWidth/1.6;
+        Bottom.position.x = 0 + Bottom.width/2;
         Bottom.position.y = window.innerHeight+Bottom.height;
         Bottom.alpha = 0.4;
 
-        const bottomText = new TextLabel(0, 0, 0.5, `Won  :  ${boardConfigVar.score}`, 200, 0xFFC0CB );
-        bottomText.position.x = 0;
-        bottomText.position.y = 0;
+        this.wonAmountText = new TextLabel(0, 0, 0.5, `Won  :  ${moneyInfo.score}`, 200, 0xFFC0CB );
+        this.wonAmountText.position.x = 0;
+        this.wonAmountText.position.y = 0;
 
-        Bottom.addChild(bottomText);
+        Bottom.addChild(this.wonAmountText);
         this.addChild(Bottom);
 
         this.spin = new Sprite(Globals.resources.Sprint.texture);
@@ -39,23 +42,38 @@ export class UiContainer extends Container
            this.callSpin();
         })
 
-        const betText = new TextLabel(0, 0, 0.5, `Bet  :  ${boardConfigVar.Bet}`, 100, 0xFFC0CB );
-        betText.position.x = -Bottom.width;
-        betText.position.y = Bottom.height/2 - bottomText.height/2;
+        const betText = new TextLabel(0, 0, 0.5, `Bet  :  ${moneyInfo.Bet}`, 100, 0xFFC0CB );
+        betText.position.x = -Bottom.width*0.8;
         Bottom.addChild(betText);
 
-        const coinText = new TextLabel(0, 0, 0.5, `Bet  :  ${boardConfigVar.Coins}`, 100, 0xFFC0CB );
-        coinText.position.x = Bottom.width;
-        Bottom.addChild(coinText);  
+        getPlayerCredit();
+        this.balanceText = new TextLabel(0, 0, 0.5, `Balance  :  ${moneyInfo.Balance}`, 100, 0xFFC0CB );
+        this.balanceText.position.x = Bottom.width*0.8;
+        Bottom.addChild(this.balanceText);  
     }
-    callSpin()
+    async callSpin()
     {
-        Globals.emitter?.Call("startSpin");
-        let time = randomRange(boardConfigVar.seconds)+ 500;
+        console.log(moneyInfo.Bet);
+        
+        assignPlayerBet();
         this.spin.interactive = false;
         const tween = new Tween(this.spin.scale)
         .to({ x : 0.23, y: 0.23 }, 100) .easing(Easing.Back.InOut)  .yoyo(true) .repeat(1) .onComplete(()=>{}) .start();
+        this.spin.alpha = 0.5;
 
-        // setTimeout(()=>{this.callSpin()},10000)
+        moneyInfo.score = 0;
+      const progress = await  this.updateWinningAmount();
+        let newBalance = moneyInfo.Balance - moneyInfo.Bet;
+        Globals.emitter?.Call("updateBalance",newBalance);
+    }
+    updateBalance(newBalance: number)
+    {
+        moneyInfo.Balance = newBalance;
+        this.balanceText.updateLabelText( `Balance  :  ${moneyInfo.Balance}`);
+    }
+
+    updateWinningAmount()
+    {
+        this.wonAmountText.updateLabelText( `Won  :  ${moneyInfo.score}`);
     }
 }

@@ -2,9 +2,11 @@
 import { Graphics } from "pixi.js";
 import { Scene } from "./Scene";
 import { CreateBoard } from "./CreateBoard";
-import { Globals, boardConfig, boardConfigVar } from "./Globals";
+import { Globals, boardConfig, boardConfigVar, moneyInfo } from "./Globals";
 import { Background } from './Background';
 import { UiContainer } from './UIContainer';
+import { log } from "console";
+import { assignPlayerBet, getPlayerCredit, getwinBalance } from "./ApiPasser";
 
 export class MainScene extends Scene {
   	
@@ -44,7 +46,28 @@ export class MainScene extends Scene {
 		this.board.startSpin();
 
 		if(msgType == "CanSpinNow")
-		this.UiContainer.spin.interactive = true;
+		{
+			this.UiContainer.spin.interactive = true;
+			this.UiContainer.spin.alpha = 1;
+			getPlayerCredit();
+		}
+		if(msgType == "updateBalance")
+		this.UiContainer.updateBalance(msgParams);
+
+		if(msgType == "WonAmount")
+		{
+			this.UiContainer.updateWinningAmount();
+		}
+
+		if(msgType == "StartCheck")
+		{
+			setTimeout(()=>{this.board.checkSlot();},2000);
+		}
+
+		// console.log(getPlayerCredit())
+
+		
+
 	}
 	
 }

@@ -41,31 +41,23 @@ export class Lines extends Graphics{
     makeLines(line :{x:number, y:number}[])
     {
         const button = new Graphics;
-        button.lineStyle(10, this.colorCode, 1);
+        button.lineStyle(10, this.colorCode, 1,0.5);
         button.zIndex = 0;
-       for(let i = 0 ; i < line.length ; i++)
-       {
+        
+        for(let i = 0 ; i < line.length ; i++)
+        {
         // console.log( "LinePos: " +  (line[i].y  + boardConfigVar.boardBoxHeight/2));
         // console.log( "GraphicPos: " + Math.abs(this.lineG.position.y ));
         // console.log( "rightPos: " +  ((line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y ) ));
         // console.log( this.lineG.position.y - (line[i].y + boardConfigVar.boardBoxHeight/2));
-       if(!this.side)
-       {
-           const rightPos = (line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y);
-           
-           button.lineTo(line[i].x  + boardConfigVar.boardBoxWidth/2+1.5 + 10,rightPos +1.5 );
-           button.moveTo(line[i].x + boardConfigVar.boardBoxWidth/2 + 10 , rightPos);
-        }
-        else
-        {
-            console.log(line[i].x);
-            
-            const rightPos = (line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y);
-            button.lineTo(line[i].x  - boardConfigVar.boardBoxWidth/2+1.5 + 10,rightPos +1.5 );
-            button.moveTo(line[i].x - boardConfigVar.boardBoxWidth/2 + 10 , rightPos);
-         }
+        const rightPos = (line[i].y) - (this.lineG.position.y);
+
+        button.lineTo( (line[i].x + 12) - this.lineG.position.x , rightPos);
+        button.moveTo( (line[i].x + 12) - this.lineG.position.x , rightPos);
         }
         this.lineG.addChild(button);
     }
+
+    makeitVisible(visible : boolean ){this.visible = visible;}
    
 }

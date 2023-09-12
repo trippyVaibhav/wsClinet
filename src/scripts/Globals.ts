@@ -7,6 +7,10 @@ import { MyEmitter } from './MyEmitter';
 import { SceneManager } from './SceneManager';
 import { Scene } from './Scene';
 import { Lines } from './Lines';
+import { Axios } from 'axios';
+import { url } from 'inspector';
+import { Url } from 'url';
+import { getPlayerCredit } from './ApiPasser';
 
 type globalDataType = {
   resources: PIXI.utils.Dict<PIXI.LoaderResource>;
@@ -16,7 +20,6 @@ type globalDataType = {
   soundResources: { [key: string]: Howl };
 
   App: App | undefined,
-
 }
 
 export const Globals: globalDataType = {
@@ -29,27 +32,30 @@ export const Globals: globalDataType = {
   // fpsStats: undefined,
   App: undefined,
   soundResources: {},
-
 };
 
 export const boardConfigVar =  {
   boardBoxWidth : 0,
   boardBoxHeight : 0,
   Matrix : {x : 5, y : 3},
-  slotArr : [],
-  maxLines : 1,
   boardPosY : 0,
-  score : 0,
-  Bet : 5,
-  Coins : 100, 
-  startPos : -815 ,
+  boardPosX : 0,
   restartPos : 650,
-  seconds :5000,
-  canMove : true,
+  lineBet: [1 ,2 ,3 ,5 ,10 ,20 ,25 ,30 ,50 ,100 ,200 ,300 ,500 ,1000],
+  lineNo : [1 ,5 ,9 ,15 ,20]
+
 }
 
+export const moneyInfo = {
+  Balance : 0, 
+  score : 0,
+  Bet : 10,
+  lineBet : 1,
+  maxLines : 1,
+}
+
+
 export const getLineinfo : any = {
-  
   0 : {
     color : "0xFF0000",
     locations : [[0,0],[0,1],[0,2],[0,3],[0,4]],
@@ -57,13 +63,69 @@ export const getLineinfo : any = {
     yPos: 10,
     payScale : 10,
   }, 
-  // 1 : {
-  //   color : "0xFF0000",
+  1 : {
+    color : "0xFFC0CB",
+    locations : [[1,0],[1,1],[1,2],[1,3],[1,4]],
+    xPos : false,
+    yPos: 200,
+    payScale : 10,
+  }, 
+  2 : {
+    color : "0x0000FF",
+    locations : [[1,0],[0,1],[0,2],[0,3],[1,4]],
+    xPos : false,
+    yPos: 250,
+    payScale : 10,
+  }, 
+  // 3 : {
+  //   color : "0x800080",
+  //   locations : [[2,0],[2,1],[2,2],[2,3],[2,4]],
+  //   xPos : false,
+  //   yPos: 350,
+  //   payScale : 10,
+  // }, 
+  // 4 : {
+  //   color : "0x00FF00",
   //   locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],
   //   xPos : true,
   //   yPos: 250,
   //   payScale : 10,
   // }, 
+  // 5 : {
+  //   color : "0xeca855",
+  //   locations : [[2,0],[1,1],[1,2],[1,3],[2,4]],
+  //   xPos : false,
+  //   yPos: 390,
+  //   payScale : 10,
+  // },
+  // 6 : {
+  //   color : "0x1db954",
+  //   locations : [[2,4],[2,3],[2,2],[2,1],[2,0]],
+  //   xPos : true,
+  //   yPos: 420,
+  //   payScale : 10,
+  // },
+  // 7 : {
+  //   color : "0xb5bf00",
+  //   locations : [[2,0],[1,1],[0,2],[0,3],[0,4]],
+  //   xPos : false,
+  //   yPos: 420,
+  //   payScale : 10,
+  // },
+  // 8 : {
+  //   color : "0xb7d1ce",
+  //   locations : [[0,0],[1,1],[2,2],[2,3],[2,4]],
+  //   xPos : false,
+  //   yPos: 10,
+  //   payScale : 10,
+  // },
+  // 9 : {
+  //   color : "0x9e1b32",
+  //   locations : [[1,0],[2,1],[2,2],[2,3],[1,4]],
+  //   xPos : true,
+  //   yPos: 280,
+  //   payScale : 10,
+  // },
 }
 
 export const slotCharArr = {
@@ -81,7 +143,6 @@ export const slotCharInfo = (slotChar : string) => {
   if(slotChar == "2") return 30;
   if(slotChar == "3") return 40;
   if(slotChar == "4") return 50;
-
 }
 
 export const boardConfig = () => {
@@ -89,11 +150,8 @@ export const boardConfig = () => {
   if(boardConfigVar.Matrix.x == 5 && boardConfigVar.Matrix.y == 4) return [300,150];
   if(boardConfigVar.Matrix.x == 3 && boardConfigVar.Matrix.y == 3) return [250,150];
   if(boardConfigVar.Matrix.x == 4 && boardConfigVar.Matrix.y == 3) return [250,150];
-
   else console.log("This Matrix Not Found"); return [0,0];
 }
-
-
 
 // export const ChangeBg = () => {
 //   if (CurrentGameData.CurrentLevel <= 1) {

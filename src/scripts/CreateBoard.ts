@@ -1,6 +1,6 @@
 import { Graphics } from "pixi.js";
 import * as PIXI from 'pixi.js';
-import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals } from './Globals';
+import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals, moneyInfo } from './Globals';
 import { Lines } from "./Lines";
 import { Slots } from './Slots';
 import { get } from "http";
@@ -9,6 +9,7 @@ import { TextLabel } from "./TextLabel";
 import { Symbol } from "./Symbol";
 import { setInterval } from "timers/promises";
 import { config } from "./appConfig";
+import { getPlayerCredit, getwinBalance } from "./ApiPasser";
 
 export class CreateBoard extends Graphics
 {
@@ -33,10 +34,11 @@ export class CreateBoard extends Graphics
         this.board.beginFill();
         this.addChild(this.board);
 
-        this.board.position.x = window.innerWidth/2 * config.minScaleFactor ;
-        this.board.position.y = window.innerHeight/2 * config.minScaleFactor;
+        this.board.position.x = window.innerWidth/2*config.minScaleFactor + this.board.width/2;
+        this.board.position.y = window.innerHeight/2;
 
         boardConfigVar.boardPosY =  this.board.position.y;
+        boardConfigVar.boardPosX =  this.board.position.x;
 
         this.charMask = new Graphics();
         this.charMask.beginFill(0xffffff);
@@ -47,8 +49,8 @@ export class CreateBoard extends Graphics
         this.addChild(this.charMask);
 
         this.addSlots();
-        this.makeLines();
         this.addChar();
+        this.makeLines();
     }
 
     addSlots()
@@ -78,7 +80,7 @@ export class CreateBoard extends Graphics
     addChar()
     {
        let xPos = boardConfigVar.boardBoxWidth/2 ;
-       let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.width/2.5 ;
+       let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2 ;
         
        const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
       for(let i =0 ;  i < shuffledArray.length ; i ++)
@@ -95,10 +97,8 @@ export class CreateBoard extends Graphics
                 this.board.addChild(char);
             }
             xPos += boardConfigVar.boardBoxWidth  ;
-            yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.width/2.5;
-
+            yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2;
         }
-       
     }
 
     makeLines()
@@ -126,10 +126,10 @@ export class CreateBoard extends Graphics
             let xIndex  = lineInfo[i][0];
             let yIndex = lineInfo[i][1];
 
-            if(!side)
-            lineArray[i]  = {x : this.slotArr[xIndex][yIndex].slot.position.x, y: this.slotArr[xIndex][yIndex].slot.position.y };
-            else
-            lineArray[i]  = {x : -this.slotArr[xIndex][yIndex].slot.position.x, y: this.slotArr[xIndex][yIndex].slot.position.y };
+            // if(!side)
+            lineArray[i]  = {x : this.slotArr[xIndex][yIndex].slot.position.x + boardConfigVar.boardBoxWidth/2, y: this.slotArr[xIndex][yIndex].slot.position.y + boardConfigVar.boardBoxHeight/2 };
+            // else
+            // lineArray[i]  = {x : -this.slotArr[xIndex][yIndex].slot.position.x, y: this.slotArr[xIndex][yIndex].slot.position.y };
             
             // console.log(lineArray[i].x);
         }
@@ -148,10 +148,10 @@ export class CreateBoard extends Graphics
                     if( this.slotChar[i][j].position.y > boardConfigVar.restartPos)
                     {
                         if(j != 8 )
-                        this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - this.slotChar[i][j].width*1.4;
+                        this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - this.slotChar[i][j].height*1.4;
                         else
                         {
-                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y - this.slotChar[i][8].width;
+                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y - this.slotChar[i][8].height;
                         }
                     }
                 }
@@ -163,7 +163,6 @@ export class CreateBoard extends Graphics
     {
         
         //         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
-        console.log(this.slotChar.length);
         
       for(let j = 0 ; j < this.slotChar.length ; j++)
         {
@@ -184,7 +183,7 @@ export class CreateBoard extends Graphics
                     this.addOnSlot(i,j)
                 }
             }
-        },1000*(j+1))
+        },500*(j+1))
         }
     }
         ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
@@ -192,16 +191,20 @@ export class CreateBoard extends Graphics
 
     addOnSlot(winningIndex : number, rowNumber : number)
     {
-        console.log("Row Number :  "+ rowNumber + "winningIndex  : "+ winningIndex);
+        // console.log("Row Number :  "+ rowNumber + "winningIndex  : "+ winningIndex);
         for(let  j = 0 ; j  <  this.slotArr.length ; j++)
         {
             let index = (winningIndex -( this.slotArr.length-1))+(j+1);
-            console.log("Index  :  "+ index);
+            // console.log("Index  :  "+ index);
             
             if(index > 8)
             index =  (index-9);
 
-            console.log(this.slotChar[rowNumber][index].symbol);
+            if(index == -1 )
+            {
+              index = 8;
+            }
+            // console.log(this.slotChar[rowNumber][index].symbol);
             this.slotArr[j][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
         }
 
@@ -212,9 +215,8 @@ export class CreateBoard extends Graphics
             this.slotChar[rowNumber][j].tweenToSlot(yPos,false);
             if(rowNumber == boardConfigVar.Matrix.x-1 && j == slotCharArr.charArr[0].length-1)
             {
-                setTimeout(()=>{Globals.emitter?.Call("CanSpinNow")},1500);
                 this.checkWinPaylines();
-               this.getSlotCurrentSymbols(); 
+            //    this.getSlotCurrentSymbols(); 
             }
         }
     }
@@ -228,9 +230,6 @@ export class CreateBoard extends Graphics
             this.slotChar[i][j].tweenToSlot(200,true);
             }
         }
-        setTimeout(()=>{this.checkSlot(); console.log("called Check Slot");
-        },2000);
-
     }
 
     checkWinPaylines()
@@ -248,24 +247,29 @@ export class CreateBoard extends Graphics
             
         //    console.log("xIndex  : " + xIndex + "yIndex  : " + yIndex);
         //    console.log("Last Symbol : " + lastSymbol + "Current Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol);
-           if(lastSymbol == undefined)
-           lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
-
            if(lastSymbol && lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol)
            {
-            //    console.log( "Same " + this.slotArr[xIndex][yIndex].currentSlotSymbol); 
+            //    console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
+            //    console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
+            
                points++;
            }
-            else
+            else if(lastSymbol)
             {
-                if(points == 1)
-                points--;
+              console.log("-----------------------------------------");
                 // console.log("not same ");
                 break;
             }
+            if(lastSymbol == undefined)
+            lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
           }
         }
-        console.log("points : " + points);
+        // console.log("points : " + points);
+        moneyInfo.score = points;
+        Globals.emitter?.Call("WonAmount");
+        getwinBalance();
+     
+        return;
     }
 
 
