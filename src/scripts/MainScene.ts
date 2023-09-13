@@ -16,20 +16,19 @@ export class MainScene extends Scene {
 	constructor() {
 	
 		super();
-	
 		
 		this.UiContainer = new UiContainer();
 		this.board = new CreateBoard();
-		
+
 		this.mainContainer.addChild(this.board,this.UiContainer);
 	}
 
-
-	
-
 	resize(): void {
 		super.resize();
-	
+		this.board.resize();
+		console.log("resized");
+		
+		// this.UiContainer.resize();
 	}
 
 	update(dt: number): void // throw new Error('Method not implemented.');

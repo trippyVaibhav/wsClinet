@@ -51,3 +51,15 @@ export const CalculateScaleFactor = () => {
 	// console.log(config.scaleFactor);
 	// console.log(config.minScaleFactor);
 };
+export const maxScaleFactor = () =>{
+	return Math.max(
+		window.innerWidth / config.logicalWidth,
+		window.innerHeight / config.logicalHeight,
+	);
+};
+export const minScaleFactor = () =>{
+	return Math.min(
+		window.innerWidth / config.logicalWidth,
+		window.innerHeight / config.logicalHeight,
+	);
+};

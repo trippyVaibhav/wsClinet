@@ -66,29 +66,38 @@ export class BackgroundSprite extends PIXI.Sprite {
         super(texture);
 
 
-        this.defaultProperties = {
-            width: width,
-            height: height,
-            scaleSize: scaleSize
-        };
+        // this.defaultProperties = {
+        //     width: width,
+        //     height: height,
+        //     scaleSize: scaleSize
+        // };
 
-        this.width = width;
-        this.height = height;
+        this.width =  window.innerWidth*50;
+        this.height = window.innerHeight*50;
 
-        if (scaleSize != null)
-            this.scale.set(scaleSize);
+        this.position.x = - window.innerWidth;
+        this.position.y = - window.innerHeight*2;
     }
+    
 
 
     resetBg(width: number | null = null, height: number | null = null) {
-        if (width != null)
-            this.defaultProperties.width = width;
+        // if (width != null)
+        //     this.defaultProperties.width = width;
 
-        if (height != null)
-            this.defaultProperties.height = height;
+        // if (height != null)
+        //     this.defaultProperties.height = height;
 
-        this.width = this.defaultProperties.width;
-        this.height = this.defaultProperties.height;
+        this.width =  window.innerWidth*50;
+        this.height = window.innerHeight*50;
+
+        this.position.x = - window.innerWidth;
+        this.position.y = - window.innerHeight*2;
+
+        console.log(config.minScaleFactor);
+        
+
+        
     }
 }
 

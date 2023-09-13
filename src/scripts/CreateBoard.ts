@@ -34,7 +34,7 @@ export class CreateBoard extends Graphics
         this.board.beginFill();
         this.addChild(this.board);
 
-        this.board.position.x = window.innerWidth/2*config.minScaleFactor + this.board.width/2;
+        this.board.position.x = boardConfigVar.boardBoxWidth*3;
         this.board.position.y = window.innerHeight/2;
 
         boardConfigVar.boardPosY =  this.board.position.y;
@@ -113,6 +113,7 @@ export class CreateBoard extends Graphics
             let line = new Lines(lineInfo.color,lineInfo.xPos,0,lineInfo.yPos,this.getLineLocation(lineInfo.locations,lineInfo.xPos));
             this.lines.push(line);
             this.board.addChild(line);
+            line.makeitVisible(false);
             // console.log(line);
         }
     }
@@ -135,7 +136,11 @@ export class CreateBoard extends Graphics
         }
         return lineArray;
     }
+resize()
+{
+    this.board.position.x = this.slotArr[0][0].slot.width*3;
 
+}
     update(dt : number)
     {
         for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )

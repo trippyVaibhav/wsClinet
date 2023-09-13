@@ -15,7 +15,7 @@ Char4 :  require("../sprites/YELLOW.png"),
 
 export const staticData = {
     // logoURL: "https://cccdn.b-cdn.net/1584464368856.png",
-    logoURL: require("/static/logo.png").default,
+    // logoURL: require("/static/logo.png").default,
 
 };
 

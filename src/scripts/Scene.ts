@@ -42,12 +42,12 @@ export abstract class Scene {
 
 
 
-        const mask = new Graphics();
-        mask.beginFill(0xffffff);
-        mask.drawRect(0, 0, config.logicalWidth, config.logicalHeight);
-        mask.endFill();
-        this.mainContainer.addChild(mask);
-        this.mainContainer.mask = mask;
+        // const mask = new Graphics();
+        // mask.beginFill(0xffffff);
+        // mask.drawRect(0, 0, config.logicalWidth, config.logicalHeight);
+        // mask.endFill();
+        // this.mainContainer.addChild(mask);
+        // this.mainContainer.mask = mask;
 
     }
 

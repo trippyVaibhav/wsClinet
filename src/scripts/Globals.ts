@@ -49,7 +49,7 @@ export const boardConfigVar =  {
 export const moneyInfo = {
   Balance : 0, 
   score : 0,
-  Bet : 10,
+  Bet : 5,
   lineBet : 1,
   maxLines : 1,
 }
@@ -77,13 +77,13 @@ export const getLineinfo : any = {
     yPos: 250,
     payScale : 10,
   }, 
-  // 3 : {
-  //   color : "0x800080",
-  //   locations : [[2,0],[2,1],[2,2],[2,3],[2,4]],
-  //   xPos : false,
-  //   yPos: 350,
-  //   payScale : 10,
-  // }, 
+  3 : {
+    color : "0x800080",
+    locations : [[2,0],[2,1],[2,2],[2,3],[2,4]],
+    xPos : false,
+    yPos: 350,
+    payScale : 10,
+  }, 
   // 4 : {
   //   color : "0x00FF00",
   //   locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],

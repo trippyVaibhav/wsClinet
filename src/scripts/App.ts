@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { CalculateScaleFactor } from "./appConfig";
+import { CalculateScaleFactor, config } from "./appConfig";
 import { Globals } from "./Globals";
 // import { onResizeFunction } from "./HtmlHandler";
 import { Loader } from "./Loader";
@@ -8,6 +8,7 @@ import { Axios } from 'axios';
 import { MyEmitter } from "./MyEmitter";
 import { SceneManager } from "./SceneManager";
 import { getPlayerCredit } from "./ApiPasser";
+import { log } from "console";
 // import { Loader } from "./Loader";
 // import { SceneManager } from "./SceneManager";
 // import { MainScene } from "./MainScene";
@@ -113,12 +114,17 @@ export class App {
 		if (window.innerWidth > window.innerHeight) {
 			if (!this.isDeviceLandscape) {
 				this.isDeviceOrientationChanged = true;
+				console.log("is Not Landscape");
+				// config.logicalWidth = 1920;
+				// config.logicalHeight = 1080;
 			}
 
 			//landscape
 		} else {
 			if (this.isDeviceLandscape) {
 				this.isDeviceOrientationChanged = true;
+				// config.logicalWidth = 1080;
+				// config.logicalHeight = 1920;
 			}
 			//portrait
 		}
