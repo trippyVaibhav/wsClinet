@@ -7,6 +7,7 @@ import { Background } from './Background';
 import { UiContainer } from './UIContainer';
 import { log } from "console";
 import { assignPlayerBet, getPlayerCredit, getwinBalance } from "./ApiPasser";
+import { config, maxScaleFactor, minScaleFactor } from './appConfig';
 
 export class MainScene extends Scene {
   	
@@ -17,18 +18,35 @@ export class MainScene extends Scene {
 	
 		super();
 		
-		this.UiContainer = new UiContainer();
 		this.board = new CreateBoard();
+		this.mainContainer.addChild(this.board);
+		this.board.position.y = config.minTopY;
 
-		this.mainContainer.addChild(this.board,this.UiContainer);
+		if(window.innerHeight>window.innerWidth)
+		this.board.position.x =500*maxScaleFactor();
+		else
+		this.board.position.x = config.minLeftX + window.innerWidth/4*minScaleFactor();
+
+		this.board.scale.set(1.65* maxScaleFactor());
+		
+		this.UiContainer = new UiContainer();
+		this.board.addChild(this.UiContainer)
+		this.UiContainer.textBG.position.y = this.board.slotArr[0][boardConfigVar.Matrix.y].slot.position.y + this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*3.5;
+        this.UiContainer.spin.position.y =  this.UiContainer.textBG.position.y +  this.UiContainer.textBG.height;
+		
 	}
 
 	resize(): void {
 		super.resize();
-		this.board.resize();
-		console.log("resized");
 		
-		// this.UiContainer.resize();
+		this.board.scale.set(1.7* maxScaleFactor());
+		this.board.position.y = config.minTopY ;
+		// this.board.position.x = window.innerWidth/4.2;
+		if(window.innerHeight>window.innerWidth)
+		this.board.position.x =500*maxScaleFactor();
+		else
+		this.board.position.x = config.minLeftX + window.innerWidth/4*minScaleFactor();
+
 	}
 
 	update(dt: number): void // throw new Error('Method not implemented.');
@@ -42,10 +60,14 @@ export class MainScene extends Scene {
 	{
 
 		if(msgType == "startSpin")
-		this.board.startSpin();
+		{
+			this.board.startSpin();
+			this.UiContainer.interactive = false;
+		}
 
 		if(msgType == "CanSpinNow")
 		{
+			this.UiContainer.interactive = true;
 			this.UiContainer.spin.interactive = true;
 			this.UiContainer.spin.alpha = 1;
 			getPlayerCredit();
@@ -62,6 +84,9 @@ export class MainScene extends Scene {
 		{
 			setTimeout(()=>{this.board.checkSlot();},2000);
 		}
+
+		if(msgType == "linesActive")
+		this.board.makelinesVisible();
 
 		// console.log(getPlayerCredit())
 

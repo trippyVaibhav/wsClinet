@@ -43,13 +43,13 @@ export class App {
 
 		//Setting Up Window On Resize Callback
 		window.onresize = (e) => {
-			this.checkIfDeviceRotated();
+			// this.checkIfDeviceRotated();
 
-			if (this.isDeviceOrientationChanged) {
-				// this.isDeviceOrientationChanged = false;
-				document.body.removeChild(this.app.view);
-                // console.log("Removed Canvas from DOM");
-			}
+			// if (this.isDeviceOrientationChanged) {
+			// 	// this.isDeviceOrientationChanged = false;
+			// 	document.body.removeChild(this.app.view);
+            //     // console.log("Removed Canvas from DOM");
+			// }
 
 			CalculateScaleFactor();
 
@@ -61,11 +61,11 @@ export class App {
 
 			SceneManager.instance!.resize();
 
-			if (this.isDeviceOrientationChanged) {
-				document.body.append(this.app.view);
-				this.isDeviceOrientationChanged = false;
-                // console.log("Added Canvas to DOM");
-			}
+			// if (this.isDeviceOrientationChanged) {
+			// 	document.body.append(this.app.view);
+			// 	this.isDeviceOrientationChanged = false;
+            //     // console.log("Added Canvas to DOM");
+			// }
 		};
 
 		//Created Emitter

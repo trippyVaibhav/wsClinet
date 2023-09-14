@@ -11,7 +11,7 @@ import { setInterval } from "timers/promises";
 import { config } from "./appConfig";
 import { getPlayerCredit, getwinBalance } from "./ApiPasser";
 
-export class CreateBoard extends Graphics
+export class CreateBoard extends PIXI.Container
 {
     board !: Graphics;
     slotArr : Slots[][] = [];
@@ -34,9 +34,7 @@ export class CreateBoard extends Graphics
         this.board.beginFill();
         this.addChild(this.board);
 
-        this.board.position.x = boardConfigVar.boardBoxWidth*3;
-        this.board.position.y = window.innerHeight/2;
-
+      
         boardConfigVar.boardPosY =  this.board.position.y;
         boardConfigVar.boardPosX =  this.board.position.x;
 
@@ -113,7 +111,7 @@ export class CreateBoard extends Graphics
             let line = new Lines(lineInfo.color,lineInfo.xPos,0,lineInfo.yPos,this.getLineLocation(lineInfo.locations,lineInfo.xPos));
             this.lines.push(line);
             this.board.addChild(line);
-            line.makeitVisible(false);
+            // line.makeitVisible(true);
             // console.log(line);
         }
     }
@@ -136,11 +134,7 @@ export class CreateBoard extends Graphics
         }
         return lineArray;
     }
-resize()
-{
-    this.board.position.x = this.slotArr[0][0].slot.width*3;
-
-}
+ 
     update(dt : number)
     {
         for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )
@@ -241,7 +235,7 @@ resize()
     {
         const entries = Object.entries(getLineinfo);
         let points  = 0;
-        for(let i = 0; i < entries.length ; i++)
+        for(let i = 0; i < moneyInfo.maxLines+1 ; i++)
         {
             let  lineInfo = getLineinfo[i]; 
             let lastSymbol = undefined; 
@@ -249,28 +243,39 @@ resize()
           {
             let xIndex =lineInfo.locations[j][0];
             let yIndex =lineInfo.locations[j][1]; 
+            let linePoints = 0;
             
         //    console.log("xIndex  : " + xIndex + "yIndex  : " + yIndex);
         //    console.log("Last Symbol : " + lastSymbol + "Current Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol);
            if(lastSymbol && lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol)
            {
-            //    console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
-            //    console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
-            
+                console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
+                console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
+                console.log("Current Line Points On Connecting  : " +linePoints);
+             
                points++;
+               linePoints++;
            }
-            else if(lastSymbol)
+            else if(lastSymbol && linePoints == 0 )
             {
-              console.log("-----------------------------------------");
-                // console.log("not same ");
+             console.log("Current Line Points  : " +linePoints);
+                
+             
+                    console.log("-----------------------------------------");
+                    lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
+            }   
+            else if(lastSymbol && linePoints >0 )
+            {
+                console.log("not same ");
                 break;
             }
+            
             if(lastSymbol == undefined)
             lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
           }
         }
         // console.log("points : " + points);
-        moneyInfo.score = points;
+        moneyInfo.score = points*moneyInfo.lineBet;
         Globals.emitter?.Call("WonAmount");
         getwinBalance();
      
@@ -317,5 +322,21 @@ resize()
         }
       
         return array;
+      }
+
+      makelinesVisible()
+      {
+        console.log(moneyInfo.maxLines);
+        
+        for(let i = 0 ; i  < this.lines.length ; i++)
+        {
+            if(i <= moneyInfo.maxLines)
+            {
+                this.lines[i].makeitVisible(true)
+            }
+            else
+            this.lines[i].makeitVisible(false)
+
+        }
       }
 }

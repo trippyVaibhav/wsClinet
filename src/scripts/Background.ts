@@ -72,11 +72,11 @@ export class BackgroundSprite extends PIXI.Sprite {
         //     scaleSize: scaleSize
         // };
 
-        this.width =  window.innerWidth*50;
-        this.height = window.innerHeight*50;
+        this.width =  width*10;
+        this.height = height*2;
 
-        this.position.x = - window.innerWidth;
-        this.position.y = - window.innerHeight*2;
+        this.position.x = - window.innerWidth*4;
+        this.position.y = -window.innerHeight/2;
     }
     
 
@@ -91,7 +91,7 @@ export class BackgroundSprite extends PIXI.Sprite {
         this.width =  window.innerWidth*50;
         this.height = window.innerHeight*50;
 
-        this.position.x = - window.innerWidth;
+        this.position.x = - window.innerWidth*2;
         this.position.y = - window.innerHeight*2;
 
         console.log(config.minScaleFactor);
