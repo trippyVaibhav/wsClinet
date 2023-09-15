@@ -44,7 +44,7 @@ export class MainScene extends Scene {
         this.board.board.position.x = window.innerWidth/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor()- 200*minScaleFactor();
 
         // this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
-        this.board.board.position.y = 0;
+        this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5*minScaleFactor()- 270*minScaleFactor();
 
 
 		// this.UiContainer.textBG.position.x = this.board.board.position.x + this.UiContainer.textBG.width/2;
@@ -54,9 +54,10 @@ export class MainScene extends Scene {
 
 	resize(): void {
 		super.resize();
-		this.board.board.scale.set(1.5*minScaleFactor());	
-console.log(config.leftX,config.rightX);
+		this.board.board.scale.set(1.5*minScaleFactor());
+
 	this.board.board.position.x = window.innerWidth/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor() - 200*minScaleFactor();
+	this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5*minScaleFactor()- 270*minScaleFactor();
 
         // this.board.board.position.x = config.leftX + ((config.rightX - config.leftX)/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5)
 		// this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
