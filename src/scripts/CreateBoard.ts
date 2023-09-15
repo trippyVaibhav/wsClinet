@@ -324,9 +324,9 @@ export class CreateBoard extends PIXI.Container
         return array;
       }
 
-      makelinesVisible()
+      makelinesVisibleOnChange()
       {
-        console.log(moneyInfo.maxLines);
+        // console.log(moneyInfo.maxLines);
         
         for(let i = 0 ; i  < this.lines.length ; i++)
         {
@@ -337,6 +337,15 @@ export class CreateBoard extends PIXI.Container
             else
             this.lines[i].makeitVisible(false)
 
+        }
+      }
+      
+      makelinesInvisible()
+      {
+        // console.log(moneyInfo.maxLines);
+        for(let i = 0 ; i  < this.lines.length ; i++)
+        {
+            this.lines[i].makeitVisible(false)
         }
       }
 }

@@ -20,7 +20,7 @@ export class MainScene extends Scene {
 		
 		this.board = new CreateBoard();
 		this.mainContainer.addChild(this.board);
-		this.board.position.y = config.minTopY;
+		this.board.position.y = config.minTopY+ 200;
 
 		if(window.innerHeight>window.innerWidth)
 		this.board.position.x =500*maxScaleFactor();
@@ -62,12 +62,23 @@ export class MainScene extends Scene {
 		if(msgType == "startSpin")
 		{
 			this.board.startSpin();
-			this.UiContainer.interactive = false;
+
+			this.UiContainer.maxLinesButtonL.interactive = false;
+			this.UiContainer.maxLinesButtonR.interactive = false;
+
+			this.UiContainer.lineBetL.interactive = false;
+			this.UiContainer.lineBetR.interactive = false;
+			this.board.makelinesInvisible();
 		}
 
 		if(msgType == "CanSpinNow")
 		{
-			this.UiContainer.interactive = true;
+			this.UiContainer.maxLinesButtonL.interactive = true;
+			this.UiContainer.maxLinesButtonR.interactive = true;
+
+			this.UiContainer.lineBetL.interactive = true;
+			this.UiContainer.lineBetR.interactive = true;
+
 			this.UiContainer.spin.interactive = true;
 			this.UiContainer.spin.alpha = 1;
 			getPlayerCredit();
@@ -86,7 +97,7 @@ export class MainScene extends Scene {
 		}
 
 		if(msgType == "linesActive")
-		this.board.makelinesVisible();
+		this.board.makelinesVisibleOnChange();
 
 		// console.log(getPlayerCredit())
 
