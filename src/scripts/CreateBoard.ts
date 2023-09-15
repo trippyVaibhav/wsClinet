@@ -13,7 +13,7 @@ import { getPlayerCredit, getwinBalance } from "./ApiPasser";
 
 export class CreateBoard extends PIXI.Container
 {
-    board !: Graphics;
+    board !: PIXI.Sprite;
     slotArr : Slots[][] = [];
 
     lines : Lines [] = [];
@@ -30,13 +30,13 @@ export class CreateBoard extends PIXI.Container
         boardConfigVar.boardBoxWidth = boardConfig[0];
         boardConfigVar.boardBoxHeight = boardConfig[1];
         
-        this.board = new PIXI.Graphics;
-        this.board.beginFill();
+        this.board = new PIXI.Sprite();
+        this.board.anchor.set(0.5)
         this.addChild(this.board);
 
       
-        boardConfigVar.boardPosY =  this.board.position.y;
-        boardConfigVar.boardPosX =  this.board.position.x;
+        // boardConfigVar.boardPosY =  this.board.position.y;
+        // boardConfigVar.boardPosX =  this.board.position.x;
 
         this.charMask = new Graphics();
         this.charMask.beginFill(0xffffff);

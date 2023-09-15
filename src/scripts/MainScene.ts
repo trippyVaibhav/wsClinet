@@ -20,12 +20,22 @@ export class MainScene extends Scene {
 		
 		this.board = new CreateBoard();
 		this.mainContainer.addChild(this.board);
-		this.board.position.y = config.minTopY+ 200;
+		
+		
+		// if(window.innerHeight>window.innerWidth)
+		// {
+			// 	console.log("Vertical");
+			// 	this.board.position.x = window.innerWidth;
+			// }
+			// else
+			// {
+				// 	console.log("Horrizontal");
+				// 	this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width;
+				// }
+				
+		this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2*maxScaleFactor();
+		this.board.position.y = window.innerHeight/2;
 
-		if(window.innerHeight>window.innerWidth)
-		this.board.position.x =500*maxScaleFactor();
-		else
-		this.board.position.x = config.minLeftX + window.innerWidth/4*minScaleFactor();
 
 		this.board.scale.set(1.65* maxScaleFactor());
 		
@@ -39,13 +49,23 @@ export class MainScene extends Scene {
 	resize(): void {
 		super.resize();
 		
-		this.board.scale.set(1.7* maxScaleFactor());
-		this.board.position.y = config.minTopY ;
+		this.board.scale.set(1.65* maxScaleFactor());
+		// this.board.position.y = config.minTopY ;
 		// this.board.position.x = window.innerWidth/4.2;
-		if(window.innerHeight>window.innerWidth)
-		this.board.position.x =500*maxScaleFactor();
-		else
-		this.board.position.x = config.minLeftX + window.innerWidth/4*minScaleFactor();
+		// this.board.position.x = window.innerWidth/2;
+		// if(window.innerHeight>window.innerWidth)
+		// {
+		// 	console.log("Vertical");
+		// 	this.board.position.x = window.innerWidth;
+		// }
+		// else
+		// {
+		// 	console.log("Horrizontal");
+		// 	this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width;
+		// }
+		this.board.position.x = window.innerWidth/2- window.innerWidth/4;
+		this.board.position.y = window.innerHeight/2;
+
 
 	}
 
