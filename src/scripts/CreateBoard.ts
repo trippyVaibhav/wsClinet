@@ -8,7 +8,7 @@ import { log } from "console";
 import { TextLabel } from "./TextLabel";
 import { Symbol } from "./Symbol";
 import { setInterval } from "timers/promises";
-import { config } from "./appConfig";
+import { config, maxScaleFactor, minScaleFactor } from "./appConfig";
 import { getPlayerCredit, getwinBalance } from "./ApiPasser";
 
 export class CreateBoard extends PIXI.Container
@@ -25,30 +25,31 @@ export class CreateBoard extends PIXI.Container
     constructor()
     {
         super();
-
         let boardConfig = getBoardConfig();
         boardConfigVar.boardBoxWidth = boardConfig[0];
         boardConfigVar.boardBoxHeight = boardConfig[1];
         
         this.board = new PIXI.Sprite();
-        this.board.anchor.set(0.5)
+        this.board.anchor.set(0.5);
         this.addChild(this.board);
 
       
-        // boardConfigVar.boardPosY =  this.board.position.y;
-        // boardConfigVar.boardPosX =  this.board.position.x;
+        boardConfigVar.boardPosY =  this.board.position.y;
+        boardConfigVar.boardPosX =  this.board.position.x;
 
         this.charMask = new Graphics();
         this.charMask.beginFill(0xffffff);
-        this.charMask.drawRect(0, 0,boardConfigVar.boardBoxWidth*boardConfigVar.Matrix.x+10,boardConfigVar.boardBoxHeight*boardConfigVar.Matrix.y+10);
+        this.charMask.drawRect(0, 0,window.innerWidth*4,boardConfigVar.boardBoxHeight*boardConfigVar.Matrix.y+10);
         this.charMask.endFill();
-        this.charMask.position.x = this.board.position.x;
+        this.charMask.position.x = 0;
         this.charMask.position.y = this.board.position.y;
-        this.addChild(this.charMask);
+        this.board.addChild(this.charMask);
 
         this.addSlots();
         this.addChar();
         this.makeLines();
+        // this.position.x =   config.logicalHeight / 2 + 20
+
     }
 
     addSlots()
@@ -275,6 +276,12 @@ export class CreateBoard extends PIXI.Container
           }
         }
         // console.log("points : " + points);
+        if(points > 0)
+        {
+            const winMusic = Globals.soundResources.onWin;
+			winMusic.volume(0.5);
+			winMusic.play();
+        }
         moneyInfo.score = points*moneyInfo.lineBet;
         Globals.emitter?.Call("WonAmount");
         getwinBalance();

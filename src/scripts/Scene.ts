@@ -37,7 +37,7 @@ export abstract class Scene {
             // } 
             // else {
                 this.mainBackground = new BackgroundSprite(Globals.resources.backGround.texture, config.logicalWidth, config.logicalHeight);
-                this.mainContainer.addChild(this.mainBackground);
+                this.addChildToFullScene(this.mainBackground);
         // }
 
 

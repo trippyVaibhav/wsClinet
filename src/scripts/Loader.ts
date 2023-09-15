@@ -121,7 +121,9 @@ export class Loader {
 
     preloadSounds(onCompleteCallback: () => void) {
 
+        
         const totalCount = Object.keys(LoaderSoundConfig).length;
+        console.log(totalCount);
         let currentCount = 0;
         for (let key in LoaderSoundConfig) {
             const sound = new Howl({

@@ -50,8 +50,10 @@ export class App {
 			// 	document.body.removeChild(this.app.view);
             //     // console.log("Removed Canvas from DOM");
 			// }
-
+			console.log("calledd");
+			
 			CalculateScaleFactor();
+			document.body.removeChild(this.app.view);
 
 			this.app.renderer.view.style.width = `${window.innerWidth}px`;
 			this.app.renderer.view.style.height = `${window.innerHeight}px`;
@@ -59,8 +61,8 @@ export class App {
 
 			// onResizeFunction();
 
+			document.body.append(this.app.view);
 			SceneManager.instance!.resize();
-
 			// if (this.isDeviceOrientationChanged) {
 			// 	document.body.append(this.app.view);
 			// 	this.isDeviceOrientationChanged = false;
@@ -85,13 +87,16 @@ export class App {
 		const loader = new Loader(this.app.loader, loaderContainer);
 
 		loader.preload().then(() => {
-		    setTimeout(() => {
-		        loaderContainer.destroy();
+			loader.preloadSounds(() => {
+				setTimeout(() => {
+					loaderContainer.destroy();
 
-		        SceneManager.instance!.start(new MainScene());
-		    }, 1000);
+					// SceneManager.instance!.start(new MainScene());
+					SceneManager.instance!.start(new MainScene());
+				}, 1000);
+			});
 		});
-
+	
 	
 		this.tabChange();
 		document.body.appendChild(this.app.view);

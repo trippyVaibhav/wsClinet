@@ -8,64 +8,62 @@ import { UiContainer } from './UIContainer';
 import { log } from "console";
 import { assignPlayerBet, getPlayerCredit, getwinBalance } from "./ApiPasser";
 import { config, maxScaleFactor, minScaleFactor } from './appConfig';
+import { Howl } from "howler";
 
 export class MainScene extends Scene {
   	
 	board !: CreateBoard;
 	UiContainer !: UiContainer;
+	bgMusic!: Howl;
 	
 	constructor() {
 	
 		super();
 		
+		this.bgMusic = Globals.soundResources.bgMusic;
+		console.log(this.bgMusic);
+		
+		this.bgMusic.play();
+		this.bgMusic.loop(true);
+		this.bgMusic.volume(0.5);
+
+		
 		this.board = new CreateBoard();
-		this.mainContainer.addChild(this.board);
-		
-		
-		// if(window.innerHeight>window.innerWidth)
-		// {
-			// 	console.log("Vertical");
-			// 	this.board.position.x = window.innerWidth;
-			// }
-			// else
-			// {
-				// 	console.log("Horrizontal");
-				// 	this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width;
-				// }
-				
-		this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2*maxScaleFactor();
-		this.board.position.y = window.innerHeight/2;
+		this.addChildToFullScene(this.board.board);
+	
 
+		this.board.board.scale.set(1.5*minScaleFactor());
 
-		this.board.scale.set(1.65* maxScaleFactor());
 		
 		this.UiContainer = new UiContainer();
-		this.board.addChild(this.UiContainer)
+		this.board.board.addChild(this.UiContainer)
 		this.UiContainer.textBG.position.y = this.board.slotArr[0][boardConfigVar.Matrix.y].slot.position.y + this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*3.5;
         this.UiContainer.spin.position.y =  this.UiContainer.textBG.position.y +  this.UiContainer.textBG.height;
 		
+
+        this.board.board.position.x = window.innerWidth/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor()- 200*minScaleFactor();
+
+        // this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
+        this.board.board.position.y = 0;
+
+
+		// this.UiContainer.textBG.position.x = this.board.board.position.x + this.UiContainer.textBG.width/2;
+		// this.board.board.position.y = window.innerHeight;
+
 	}
 
 	resize(): void {
 		super.resize();
-		
-		this.board.scale.set(1.65* maxScaleFactor());
-		// this.board.position.y = config.minTopY ;
-		// this.board.position.x = window.innerWidth/4.2;
-		// this.board.position.x = window.innerWidth/2;
-		// if(window.innerHeight>window.innerWidth)
-		// {
-		// 	console.log("Vertical");
-		// 	this.board.position.x = window.innerWidth;
-		// }
-		// else
-		// {
-		// 	console.log("Horrizontal");
-		// 	this.board.position.x = window.innerWidth/2- this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width;
-		// }
-		this.board.position.x = window.innerWidth/2- window.innerWidth/4;
-		this.board.position.y = window.innerHeight/2;
+		this.board.board.scale.set(1.5*minScaleFactor());	
+console.log(config.leftX,config.rightX);
+	this.board.board.position.x = window.innerWidth/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor() - 200*minScaleFactor();
 
+        // this.board.board.position.x = config.leftX + ((config.rightX - config.leftX)/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5)
+		// this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
+
+		// this.board.board.position.x = window.innerWidth/4;
+		// this.UiContainer.textBG.position.x = this.board.board.position.x + this.UiContainer.textBG.width/2;
+		// this.board.board.position.y = window.innerHeight;
 
 	}
 
@@ -89,6 +87,10 @@ export class MainScene extends Scene {
 			this.UiContainer.lineBetL.interactive = false;
 			this.UiContainer.lineBetR.interactive = false;
 			this.board.makelinesInvisible();
+
+			const spinMusic = Globals.soundResources.onSpin;
+			spinMusic.play();
+			spinMusic.volume(0.5);
 		}
 
 		if(msgType == "CanSpinNow")

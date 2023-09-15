@@ -21,7 +21,9 @@ export const fontData = ["FredokaOne"];
 
 
 export const LoaderSoundConfig: any = {
-
+bgMusic : require("../sounds/BgMusic.mp3"),
+onSpin : require("../sounds/onStartCoin.mp3"),
+onWin : require("../sounds/winMusic.mp3"),
 
 
 };
