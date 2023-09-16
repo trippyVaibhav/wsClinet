@@ -3,13 +3,8 @@ import * as PIXI from 'pixi.js';
 import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals, moneyInfo } from './Globals';
 import { Lines } from "./Lines";
 import { Slots } from './Slots';
-import { get } from "http";
-import { log } from "console";
-import { TextLabel } from "./TextLabel";
 import { Symbol } from "./Symbol";
-import { setInterval } from "timers/promises";
-import { config, maxScaleFactor, minScaleFactor } from "./appConfig";
-import { getPlayerCredit, getwinBalance } from "./ApiPasser";
+import { getwinBalance } from "./ApiPasser";
 
 export class CreateBoard extends PIXI.Container
 {
@@ -20,7 +15,6 @@ export class CreateBoard extends PIXI.Container
     slotChar : Symbol [][] = [];
     charMask !: Graphics;
     winningSlots : Symbol[][] = [];
-    
 
     constructor()
     {
@@ -33,7 +27,6 @@ export class CreateBoard extends PIXI.Container
         this.board.anchor.set(0.5);
         this.addChild(this.board);
 
-      
         boardConfigVar.boardPosY =  this.board.position.y;
         boardConfigVar.boardPosX =  this.board.position.x;
 
@@ -48,8 +41,6 @@ export class CreateBoard extends PIXI.Container
         this.addSlots();
         this.addChar();
         this.makeLines();
-        // this.position.x =   config.logicalHeight / 2 + 20
-
     }
 
     addSlots()
@@ -102,7 +93,6 @@ export class CreateBoard extends PIXI.Container
 
     makeLines()
     {
-   
         const entries = Object.entries(getLineinfo);
         for(let i = 0; i < entries.length ; i++)
         {
@@ -112,8 +102,7 @@ export class CreateBoard extends PIXI.Container
             let line = new Lines(lineInfo.color,lineInfo.xPos,0,lineInfo.yPos,this.getLineLocation(lineInfo.locations,lineInfo.xPos));
             this.lines.push(line);
             this.board.addChild(line);
-            // line.makeitVisible(true);
-            // console.log(line);
+            line.makeitVisible(false);
         }
     }
 
@@ -161,9 +150,7 @@ export class CreateBoard extends PIXI.Container
 
     checkSlot()
     {
-        
         //         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
-        
       for(let j = 0 ; j < this.slotChar.length ; j++)
         {
 
@@ -187,7 +174,6 @@ export class CreateBoard extends PIXI.Container
         }
     }
         ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
-    
 
     addOnSlot(winningIndex : number, rowNumber : number)
     {
@@ -250,24 +236,22 @@ export class CreateBoard extends PIXI.Container
         //    console.log("Last Symbol : " + lastSymbol + "Current Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol);
            if(lastSymbol && lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol)
            {
-                console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
-                console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
-                console.log("Current Line Points On Connecting  : " +linePoints);
+                // console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
+                // console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
+                // console.log("Current Line Points On Connecting  : " +linePoints);
              
                points++;
                linePoints++;
            }
             else if(lastSymbol && linePoints == 0 )
             {
-             console.log("Current Line Points  : " +linePoints);
-                
-             
-                    console.log("-----------------------------------------");
+            //  console.log("Current Line Points  : " +linePoints);
+            // console.log("-----------------------------------------");
                     lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
             }   
             else if(lastSymbol && linePoints >0 )
             {
-                console.log("not same ");
+                // console.log("not same ");
                 break;
             }
             
@@ -334,7 +318,6 @@ export class CreateBoard extends PIXI.Container
       makelinesVisibleOnChange()
       {
         // console.log(moneyInfo.maxLines);
-        
         for(let i = 0 ; i  < this.lines.length ; i++)
         {
             if(i <= moneyInfo.maxLines)
@@ -343,7 +326,6 @@ export class CreateBoard extends PIXI.Container
             }
             else
             this.lines[i].makeitVisible(false)
-
         }
       }
       

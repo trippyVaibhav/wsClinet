@@ -1,9 +1,6 @@
 import { Sprite, Texture, Text } from 'pixi.js';
 import { Globals, boardConfigVar } from './Globals';
-import { log } from 'console';
 import { Easing, Tween } from '@tweenjs/tween.js';
-import { lerp } from './Utilities';
-import TWEEN from '@tweenjs/tween.js';
 
 export class Symbol extends Sprite
 {
@@ -21,8 +18,6 @@ export class Symbol extends Sprite
       this.position.x = position.x;
       this.position.y = position.y;
     }
-
- 
 
     tweenToSlot(ypos : number, pos : boolean )
     {
@@ -43,7 +38,6 @@ export class Symbol extends Sprite
         .onComplete(()=>{this.shouldMove = true})
         .start();
       }
-    
     }
 
 }

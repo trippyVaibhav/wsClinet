@@ -7,13 +7,16 @@ import { assignPlayerBet, getPlayerCredit } from './ApiPasser';
 
 export class UiContainer extends Container
 {
+    textBG : Sprite;
     spin : Sprite;
+    
     balanceText : TextLabel;
     wonAmountText: TextLabel;
-    textBG : Sprite;
+
     betText: TextLabel;
     lineBetL !: Sprite;
     lineBetR !: Sprite;
+
     maxLinesButtonL !: Sprite;
     maxLinesButtonR !: Sprite;
     
@@ -23,7 +26,7 @@ export class UiContainer extends Container
 
         this.textBG= new Sprite(Globals.resources.Bottom.texture);
         this.textBG.anchor.set(0.5);
-        this.textBG.scale.set(0.2);
+        this.textBG.scale.set(0.18,0.2);
         this.textBG.position.x = this.textBG.width/2;
         this.textBG.alpha = 0.4;
 
@@ -170,7 +173,7 @@ export class UiContainer extends Container
         let lineIndex = boardConfigVar.lineNo.length-1;
         moneyInfo.maxLines = lineIndex;
         const lineBetText = new TextLabel(0, 0, 0.5, boardConfigVar.lineNo[lineIndex].toString(), 100, 0xFFC0CB );
-        lineBetText.position.x = -this.textBG.width*2.1;
+        lineBetText.position.x = -this.textBG.width*2.4;
         this.textBG.addChild(lineBetText);
 
         this.maxLinesButtonL = new Sprite(Globals.resources.arrL.texture);

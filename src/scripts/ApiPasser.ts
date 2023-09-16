@@ -5,17 +5,12 @@ import { log } from "console";
 const axiosApi = axios.create({
 	baseURL: 'https://casino-games-server.onrender.com',
 	timeout: 8000,
-	// headers: {
-	// 	Accept: 'application/json',
-	// 	'x-rapidapi-host': 'famous-quotes4.p.rapidapi.com',
-	// 	'x-rapidapi-key': '<your-key-here>', 
-	// },
 });
 
-// username = player11 password = player11
 const userName = "player11";
 const password = "player11";
 const baseUrl ='https://casino-games-server.onrender.com';
+
 
 // API Call for GETTING Player information
 export const getPlayerCredit = async () => {
@@ -26,6 +21,8 @@ export const getPlayerCredit = async () => {
     .catch(function(error) {console.log(error);});
 };
 
+
+// Api for putting Player Bet and Locking it
 export const assignPlayerBet = async () => {
 	Globals.emitter?.Call("startSpin");
 	// console.log("spini", moneyInfo.Bet, response.data);
@@ -33,6 +30,9 @@ export const assignPlayerBet = async () => {
 		.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
     .catch(function(error) {console.log(error);});
 };
+
+
+//Api for Getting the Winning Amount for the Player.
 export const getwinBalance = async () => {
 	console.log("win", moneyInfo.score)
 	const response = await axios.post(`${baseUrl}/playerWin`, {userName,password,credits:moneyInfo.score})
