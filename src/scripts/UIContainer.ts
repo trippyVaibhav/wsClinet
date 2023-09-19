@@ -41,8 +41,9 @@ export class UiContainer extends Container
 
         this.spin = new Sprite(Globals.resources.Sprint.texture);
         this.spin.anchor.set(0.5);
-        this.spin.scale.set(0.2);
-        this.spin.position.x = this.textBG.position.x - this.spin.width/4;
+        this.spin.scale.set(1);
+        this.spin.position.x = this.textBG.position.x - this.spin.width/2;
+        
         this.addChild(this.spin);
         this.spin.interactive = true;
         this.spin.buttonMode = true;

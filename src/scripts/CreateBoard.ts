@@ -23,7 +23,7 @@ export class CreateBoard extends PIXI.Container
         boardConfigVar.boardBoxWidth = boardConfig[0];
         boardConfigVar.boardBoxHeight = boardConfig[1];
         
-        this.board = new PIXI.Sprite();
+        this.board = new PIXI.Sprite(Globals.resources.frame.texture);
         this.board.anchor.set(0.5);
         this.addChild(this.board);
 
@@ -32,10 +32,10 @@ export class CreateBoard extends PIXI.Container
 
         this.charMask = new Graphics();
         this.charMask.beginFill(0xffffff);
-        this.charMask.drawRect(0, 0,window.innerWidth*4,boardConfigVar.boardBoxHeight*boardConfigVar.Matrix.y+10);
+        this.charMask.drawRect(0, 0,this.board.width,this.board.height/1.3);
         this.charMask.endFill();
-        this.charMask.position.x = 0;
-        this.charMask.position.y = this.board.position.y;
+        this.charMask.position.x = this.board.position.x - this.board.width/2;
+        this.charMask.position.y = this.board.position.y - this.board.height/2+ 55;
         this.board.addChild(this.charMask);
 
         this.addSlots();
@@ -45,7 +45,7 @@ export class CreateBoard extends PIXI.Container
 
     addSlots()
     { 
-        let positionX = 0;
+        let positionX = 100;
         let positionY = 0;
 
         for(let i = 0 ; i < boardConfigVar.Matrix.y; i++)
@@ -69,8 +69,10 @@ export class CreateBoard extends PIXI.Container
 
     addChar()
     {
-       let xPos = boardConfigVar.boardBoxWidth/2 ;
-       let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2 ;
+       let xPos = - this.board.width/2 + 130 ;
+    //    let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2 ;
+    let yPos =this.board.height/3 - 50;
+
         
        const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
       for(let i =0 ;  i < shuffledArray.length ; i ++)
@@ -79,7 +81,7 @@ export class CreateBoard extends PIXI.Container
             
             for(let j =shuffledArray[0].length-1; j >=0 ; j--)
             {
-                let char = new Symbol(0.02,shuffledArray[i][j],{x: xPos, y: yPos});
+                let char = new Symbol(0.9,shuffledArray[i][j],{x: xPos, y: yPos});
                 yPos = yPos - boardConfigVar.boardBoxHeight;
                 char.position.x = char.position.x;
                 this.slotChar[i][j] = char;
@@ -87,7 +89,7 @@ export class CreateBoard extends PIXI.Container
                 this.board.addChild(char);
             }
             xPos += boardConfigVar.boardBoxWidth  ;
-            yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2;
+            yPos = this.board.height/3 - 50;
         }
     }
 

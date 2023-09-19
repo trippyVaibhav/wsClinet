@@ -72,11 +72,11 @@ export class BackgroundSprite extends PIXI.Sprite {
         //     scaleSize: scaleSize
         // };
 
-        this.width =  width*10;
-        this.height = height*10;
+        this.width =  width;
+        this.height = height;
 
-        this.position.x = - window.innerWidth*2;
-        this.position.y = - window.innerHeight*4;
+        this.position.x =0;
+        this.position.y = 0;
     }
     
 

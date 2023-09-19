@@ -13,7 +13,8 @@ export class Symbol extends Sprite
       super(Globals.resources[char].texture);
       
       this.anchor.set(0.5);
-      this.scale.set(scale);
+      this.scale.set(scale);  
+
       this.symbol = symbol;
       this.position.x = position.x;
       this.position.y = position.y;

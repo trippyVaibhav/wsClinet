@@ -1,4 +1,4 @@
-
+  
 import { Howl } from 'howler';
 import * as PIXI from 'pixi.js';
 import { App } from './App';

@@ -50,7 +50,6 @@ export class App {
 			// 	document.body.removeChild(this.app.view);
             //     // console.log("Removed Canvas from DOM");
 			// }
-			console.log("calledd");
 			
 			CalculateScaleFactor();
 			document.body.removeChild(this.app.view);
@@ -85,13 +84,11 @@ export class App {
 		this.app.stage.addChild(loaderContainer);
 
 		const loader = new Loader(this.app.loader, loaderContainer);
-
 		loader.preload().then(() => {
 			loader.preloadSounds(() => {
 				setTimeout(() => {
 					loaderContainer.destroy();
 
-					// SceneManager.instance!.start(new MainScene());
 					SceneManager.instance!.start(new MainScene());
 				}, 1000);
 			});

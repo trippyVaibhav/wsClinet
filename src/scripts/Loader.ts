@@ -137,7 +137,6 @@ export class Loader {
                 currentCount++;
 
                 Globals.soundResources[key] = sound;
-
                 if (currentCount >= totalCount) {
                     onCompleteCallback();
                 }
