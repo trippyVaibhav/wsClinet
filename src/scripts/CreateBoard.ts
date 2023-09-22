@@ -1,4 +1,4 @@
-import { Graphics, Sprite } from "pixi.js";
+import { Graphics, Sprite, Resource } from 'pixi.js';
 import * as PIXI from 'pixi.js';
 import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals, moneyInfo } from './Globals';
 import { Lines } from "./Lines";
@@ -36,11 +36,53 @@ export class CreateBoard extends PIXI.Container
         this.charMask.position.x = - this.board.width/2;
         this.charMask.position.y = - this.board.height/2+20;
 
-        const frame = new Sprite()
-
         this.addSlots();
         this.addChar();
         this.makeLines();
+
+        const frame1 = new Sprite(Globals.resources.frame1.texture);
+        const frame2 = new Sprite(Globals.resources.frame2.texture);
+        const frame3 = new Sprite(Globals.resources.frame3.texture);
+        const frame4 = new Sprite(Globals.resources.frame4.texture);
+        const frameP1 = new Sprite(Globals.resources.frameP1.texture);
+        const frameP2 = new Sprite(Globals.resources.frameP2.texture);
+        const frameP3= new Sprite(Globals.resources.frameP3.texture);
+        const frameP4 = new Sprite(Globals.resources.frameP4.texture);
+
+        // frame1.anchor.set(0.5);
+        // frame2.anchor.set(0.5);
+        // frame3.anchor.set(0.5);
+        // frame4.anchor.set(0.5);
+        // frameP1.anchor.set(0.5);
+        // frameP2.anchor.set(0.5);
+        // frameP3.anchor.set(0.5);
+        // frameP4.anchor.set(0.5);
+
+        this.board.addChild(frame1,frame2,frame3,frame4,frameP1,frameP2,frameP3,frameP4);
+
+        frame1.position.y = -this.board.height/2-45;
+        frame1.position.x = -this.board.width/2-45;
+
+        frame2.position.y = -this.board.height/2 - 45;
+
+        // frame3.position.x = this.board.height/2;
+        // frame3.position.y = this.board.height/2;
+
+        frame4.position.x = -this.board.width/2-45;
+
+        frameP1.position.y = -this.board.height/2-45;
+        frameP1.position.x = -35;
+
+        frameP2.position.y = this.board.height/2 -45;
+        frameP2.position.x = -35;
+
+        frameP3.position.x = -this.board.width/2 -45;
+        frameP3.position.y = -32;
+
+        frameP4.position.x = this.board.width/2 -45;
+        frameP4.position.y = -32;
+
+
     }
 
     addSlots()
@@ -174,14 +216,19 @@ export class CreateBoard extends PIXI.Container
         for(let  j = 0 ; j  <  this.slotArr.length ; j++)
         {
             let index = (winningIndex -( this.slotArr.length-1)+(j+1));
-            // console.log("Index  :  "+ index);
             
-            if(index > 8  ||  index < 0)
+            if(index > 8  )
             index = Math.abs(index - 9);
 
-            index = Math.abs(index -1)
-            // console.log("row  :  "+ rowNumber);
+            if( index < 0)
+            index = Math.abs(index - 8);
 
+            // console.log("Index1  :  "+ index);
+        
+        index = Math.abs(index -1)
+        // console.log("row  :  "+ rowNumber);
+        
+        // console.log("Index2  :  "+ index);
             // console.log(this.slotChar[rowNumber][index].symbol);
             this.slotArr[j][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
         }

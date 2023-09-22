@@ -12,6 +12,17 @@ export const LoaderConfig = {
     arrR : require("../sprites/Gamesprite/RightButton.png"),
     frame : require("../sprites/Gamesprite/Frame.png"),
     whiteBG : require("../sprites/whiteBG.png"),
+    frame1 :require("../sprites/Gamesprite/Vector-1.png"),
+    frame2 :require("../sprites/Gamesprite/Vector-2.png"),
+    frame3 :require("../sprites/Gamesprite/Vector-3.png"),
+    frame4 :require("../sprites/Gamesprite/Vector-4.png"),
+    frameP1 :require("../sprites/Gamesprite/VectorP1.png"),
+    frameP2 :require("../sprites/Gamesprite/VectorP2.png"),
+    frameP3 :require("../sprites/Gamesprite/VectorP3.png"),
+    frameP4 :require("../sprites/Gamesprite/VectorP4.png"),
+
+
+    
 
 };
 
