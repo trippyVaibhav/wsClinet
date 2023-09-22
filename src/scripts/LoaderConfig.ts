@@ -11,11 +11,13 @@ export const LoaderConfig = {
     arrL : require("../sprites/Gamesprite/LeftButton.png"),
     arrR : require("../sprites/Gamesprite/RightButton.png"),
     frame : require("../sprites/Gamesprite/Frame.png"),
+    whiteBG : require("../sprites/whiteBG.png"),
+
 };
 
 export const staticData = {
     // logoURL: "https://cccdn.b-cdn.net/1584464368856.png",
-    // logoURL: require("/static/logo.png").default,
+    logoURL: require("/static/logo.png").default,
 
 };
 

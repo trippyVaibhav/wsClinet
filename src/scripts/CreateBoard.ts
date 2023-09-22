@@ -1,4 +1,4 @@
-import { Graphics } from "pixi.js";
+import { Graphics, Sprite } from "pixi.js";
 import * as PIXI from 'pixi.js';
 import { boardConfig as getBoardConfig, boardConfigVar, getLineinfo, slotCharArr, Globals, moneyInfo } from './Globals';
 import { Lines } from "./Lines";
@@ -26,17 +26,17 @@ export class CreateBoard extends PIXI.Container
         this.board = new PIXI.Sprite(Globals.resources.frame.texture);
         this.board.anchor.set(0.5);
         this.addChild(this.board);
-
-        boardConfigVar.boardPosY =  this.board.position.y;
-        boardConfigVar.boardPosX =  this.board.position.x;
-
+        
         this.charMask = new Graphics();
         this.charMask.beginFill(0xffffff);
-        this.charMask.drawRect(0, 0,this.board.width,this.board.height/1.3);
+        this.charMask.drawRect(0, 0,this.board.width,this.board.height-20);
         this.charMask.endFill();
-        this.charMask.position.x = this.board.position.x - this.board.width/2;
-        this.charMask.position.y = this.board.position.y - this.board.height/2+ 55;
         this.board.addChild(this.charMask);
+
+        this.charMask.position.x = - this.board.width/2;
+        this.charMask.position.y = - this.board.height/2+20;
+
+        const frame = new Sprite()
 
         this.addSlots();
         this.addChar();
@@ -45,51 +45,52 @@ export class CreateBoard extends PIXI.Container
 
     addSlots()
     { 
-        let positionX = 100;
-        let positionY = 0;
+        let positionX = -this.board.width/2 ;
+        let positionY = -this.board.height/2 ;
 
         for(let i = 0 ; i < boardConfigVar.Matrix.y; i++)
         {
            this.slotArr[i] = [];
             for(let j = 0; j <  boardConfigVar.Matrix.x; j++)
             { 
-        
-                this.slotArr[i][j] = new Slots({ x: positionX, y : positionY},i,j);
-                positionX = this.slotArr[i][j].slot.position.x+ this.slotArr[i][j].width;
+                const slot = new Slots({ x: positionX, y : positionY},i,j);
+                this.slotArr[i][j] = slot;
+                
+                this.slotArr[i][j].position.x = this.slotArr[i][j].position.x + this.slotArr[i][j].width/2 + 10;
+                this.slotArr[i][j].position.y = this.slotArr[i][j].position.y + this.slotArr[i][j].height/2+ 30;
+                
+                positionX  += slot.width + 20 ;
              
                 if(j ==  boardConfigVar.Matrix.x-1 )
                 {
-                    positionX = 0;
-                    positionY = this.slotArr[i][j].slot.position.y+ this.slotArr[i][j].height;
+                    positionX =-this.board.width/2 ;
+                    positionY +=  160;
                 }
-                this.board.addChild(this.slotArr[i][j].slot);
+                this.board.addChild(this.slotArr[i][j]);
             }
         }
     }
 
     addChar()
     {
-       let xPos = - this.board.width/2 + 130 ;
-    //    let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].slot.position.y + this.slotArr[boardConfigVar.Matrix.y-1][0].slot.height/2 ;
-    let yPos =this.board.height/3 - 50;
+       let xPos = this.slotArr[0][0].position.x;
+       let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y;
 
-        
        const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
-      for(let i =0 ;  i < shuffledArray.length ; i ++)
+        for(let i =0 ;  i < shuffledArray.length ; i ++)
         {
             this.slotChar[i] = []; 
             
             for(let j =shuffledArray[0].length-1; j >=0 ; j--)
             {
                 let char = new Symbol(0.9,shuffledArray[i][j],{x: xPos, y: yPos});
-                yPos = yPos - boardConfigVar.boardBoxHeight;
-                char.position.x = char.position.x;
+                yPos -= 150;
                 this.slotChar[i][j] = char;
                 this.slotChar[i][j].mask = this.charMask;
                 this.board.addChild(char);
             }
-            xPos += boardConfigVar.boardBoxWidth  ;
-            yPos = this.board.height/3 - 50;
+            xPos += this.slotArr[0][0].width+20;
+            yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y;
         }
     }
 
@@ -101,8 +102,9 @@ export class CreateBoard extends PIXI.Container
             let lineInfo;
 
             lineInfo = getLineinfo[i];     
-            let line = new Lines(lineInfo.color,lineInfo.xPos,0,lineInfo.yPos,this.getLineLocation(lineInfo.locations,lineInfo.xPos));
+            let line = new Lines(lineInfo.color,lineInfo.xPos,0,lineInfo.yPos,this.getLineLocation(lineInfo.locations,lineInfo.xPos),this.board);
             this.lines.push(line);
+
             this.board.addChild(line);
             line.makeitVisible(false);
         }
@@ -111,18 +113,12 @@ export class CreateBoard extends PIXI.Container
     getLineLocation (lineInfo : number[][], side : boolean)
     {
         let lineArray = [];
-    //    console.log(this.slotArr[0][0].slot.position.x + boardConfigVar.boardBoxWidth/2);
         for(let i = 0; i < lineInfo.length; i++)
         {
             let xIndex  = lineInfo[i][0];
             let yIndex = lineInfo[i][1];
 
-            // if(!side)
-            lineArray[i]  = {x : this.slotArr[xIndex][yIndex].slot.position.x + boardConfigVar.boardBoxWidth/2, y: this.slotArr[xIndex][yIndex].slot.position.y + boardConfigVar.boardBoxHeight/2 };
-            // else
-            // lineArray[i]  = {x : -this.slotArr[xIndex][yIndex].slot.position.x, y: this.slotArr[xIndex][yIndex].slot.position.y };
-            
-            // console.log(lineArray[i].x);
+            lineArray[i]  = {x : this.slotArr[xIndex][yIndex].position.x , y: this.slotArr[xIndex][yIndex].position.y};
         }
         return lineArray;
     }
@@ -139,10 +135,10 @@ export class CreateBoard extends PIXI.Container
                     if( this.slotChar[i][j].position.y > boardConfigVar.restartPos)
                     {
                         if(j != 8 )
-                        this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - this.slotChar[i][j].height*1.4;
+                        this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - 150;
                         else
                         {
-                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y - this.slotChar[i][8].height;
+                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y -70;
                         }
                     }
                 }
@@ -151,26 +147,19 @@ export class CreateBoard extends PIXI.Container
     }
 
     checkSlot()
-    {
-        //         console.log( this.slotArr[0][0].slot.position.x -  this.slotArr[0][0].slot.width);
+    {               
+      
       for(let j = 0 ; j < this.slotChar.length ; j++)
         {
 
         setTimeout(()=>{
             for(let i = 0 ; i < this.slotChar[0].length ; i++)
             {
-            let x ;
-            
-            if( this.slotChar[j][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.height*0.5 
-                && this.slotChar[j][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5 ) 
-                {
-                    this.addOnSlot(i,j)
-                }
-                else if(this.slotChar[j][i].position.y > this.slotArr[0][boardConfigVar.Matrix.y].slot.height
-                    && this.slotChar[j][i].position.y < this.slotArr[0][boardConfigVar.Matrix.y].slot.height*2)
-                {
-                    this.addOnSlot(i,j)
-                }
+                if( this.slotChar[j][i].position.y > this.slotArr[0][1].position.y - this.slotArr[0][1].height
+                    && this.slotChar[j][i].position.y < 0 ) 
+                    {
+                        this.addOnSlot(i,j)
+                    }
             }
         },500*(j+1))
         }
@@ -179,25 +168,26 @@ export class CreateBoard extends PIXI.Container
 
     addOnSlot(winningIndex : number, rowNumber : number)
     {
+        // console.log(this.slotChar);
+        
         // console.log("Row Number :  "+ rowNumber + "winningIndex  : "+ winningIndex);
         for(let  j = 0 ; j  <  this.slotArr.length ; j++)
         {
-            let index = (winningIndex -( this.slotArr.length-1))+(j+1);
+            let index = (winningIndex -( this.slotArr.length-1)+(j+1));
             // console.log("Index  :  "+ index);
             
-            if(index > 8)
-            index =  (index-9);
+            if(index > 8  ||  index < 0)
+            index = Math.abs(index - 9);
 
-            if(index == -1 )
-            {
-              index = 8;
-            }
+            index = Math.abs(index -1)
+            // console.log("row  :  "+ rowNumber);
+
             // console.log(this.slotChar[rowNumber][index].symbol);
             this.slotArr[j][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
         }
 
         let yPos : number;
-        yPos = this.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5 - this.slotChar[rowNumber][winningIndex].position.y;
+        yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y - this.slotChar[rowNumber][winningIndex].position.y;
         for(let j = 0; j  < slotCharArr.charArr[0].length ; j++)
         {
             this.slotChar[rowNumber][j].tweenToSlot(yPos,false);
@@ -271,7 +261,7 @@ export class CreateBoard extends PIXI.Container
         moneyInfo.score = points*moneyInfo.lineBet;
         Globals.emitter?.Call("WonAmount");
         getwinBalance();
-     
+        // this.getSlotCurrentSymbols()
         return;
     }
 

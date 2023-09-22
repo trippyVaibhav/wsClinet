@@ -26,23 +26,27 @@ export class UiContainer extends Container
 
         this.textBG= new Sprite(Globals.resources.Bottom.texture);
         this.textBG.anchor.set(0.5);
-        this.textBG.scale.set(0.18,0.2);
-        this.textBG.position.x = this.textBG.width/2;
-        this.textBG.alpha = 0.4;
+        this.textBG.scale.set(0.15,0.1);
+        this.textBG.position.x = -this.textBG.width/4;
+        this.textBG.alpha = 1;
+
+        this.textBG.position.y = 300;
 
         this.lineBetText();
         this.payLineText();
         this.wonAmountText = new TextLabel(0, 0, 0.5, `Won  :  ${moneyInfo.score}`, 200, 0xFFC0CB );
-        this.wonAmountText.position.x = -this.wonAmountText.width/2;
+        this.wonAmountText.position.x = -this.wonAmountText.width;
         this.wonAmountText.position.y = 0;
 
         this.textBG.addChild(this.wonAmountText);
         this.addChild(this.textBG);
 
         this.spin = new Sprite(Globals.resources.Sprint.texture);
-        this.spin.anchor.set(0.5);
+        this.spin.anchor.set(1,0.5);
         this.spin.scale.set(1);
-        this.spin.position.x = this.textBG.position.x - this.spin.width/2;
+        this.spin.position.y = this.textBG.position.y;
+        this.spin.position.x = this.textBG.width/2 + this.spin.width/2;
+
         
         this.addChild(this.spin);
         this.spin.interactive = true;
@@ -54,13 +58,16 @@ export class UiContainer extends Container
         })
 
         getPlayerCredit();
-        this.balanceText = new TextLabel(0, 0, 0.5, `Balance  :  ${moneyInfo.Balance}`, 150, 0xFFC0CB );
-        this.balanceText.position.x = this.textBG.width*1.5;
+        this.balanceText = new TextLabel(0, 0, 0, `Balance  :  ${moneyInfo.Balance}`, 150, 0xFFC0CB );
+        this.balanceText.position.x = this.textBG.width*2 + this.balanceText.width  ;
+        this.balanceText.anchor.set(1,0.5);
         this.textBG.addChild(this.balanceText); 
         
         moneyInfo.Bet = (moneyInfo.maxLines+1)*moneyInfo.lineBet;
-        this.betText = new TextLabel(0, 0, 0.5, `Bet  :  ${moneyInfo.Bet}`, 150, 0xFFC0CB );
+        this.betText = new TextLabel(0, 0, 0, `Bet  :  ${moneyInfo.Bet}`, 150, 0xFFC0CB );
         this.betText.position.x = this.textBG.width*0.5;
+        this.betText.anchor.set(1,0.5);
+ 
         this.textBG.addChild(this.betText);   
     }
 
@@ -102,17 +109,17 @@ export class UiContainer extends Container
         let betIndex = boardConfigVar.lineBet.length-1;
         moneyInfo.lineBet = boardConfigVar.lineBet[betIndex];
         const lineBetText = new TextLabel(0, 0, 0.5,boardConfigVar.lineBet[betIndex].toString(), 100, 0xFFC0CB );
-        lineBetText.position.x = -this.textBG.width*1.5;
+        lineBetText.position.x = this.textBG.width;
         this.textBG.addChild(lineBetText);
 
         this.lineBetL = new Sprite(Globals.resources.arrL.texture);
         this.lineBetL.anchor.set(0.5);        
-        this.lineBetL.scale.set(0.5); 
+        this.lineBetL.scale.set(10); 
         this.lineBetL.position.x = -200; 
         
         this.lineBetR = new Sprite(Globals.resources.arrR.texture);
         this.lineBetR.anchor.set(0.5);        
-        this.lineBetR.scale.set(0.5); 
+        this.lineBetR.scale.set(10); 
         this.lineBetR.position.x = 200; 
         this.lineBetR.interactive = this.lineBetL.interactive = true;
             
@@ -165,7 +172,7 @@ export class UiContainer extends Container
         })
 
         const betTextLable = new TextLabel(0, 0, 0.5,"LineBet", 100, 0xFFC0CB );
-        betTextLable.position.y =  this.lineBetL.height;
+        betTextLable.position.y =  lineBetText.height;
         lineBetText.addChild(this.lineBetL,this.lineBetR,betTextLable);
     }
 
@@ -179,12 +186,12 @@ export class UiContainer extends Container
 
         this.maxLinesButtonL = new Sprite(Globals.resources.arrL.texture);
         this.maxLinesButtonL.anchor.set(0.5);        
-        this.maxLinesButtonL.scale.set(0.5); 
+        this.maxLinesButtonL.scale.set(10); 
         this.maxLinesButtonL.position.x = -200; 
         
         this.maxLinesButtonR = new Sprite(Globals.resources.arrR.texture);
         this.maxLinesButtonR.anchor.set(0.5);        
-        this.maxLinesButtonR.scale.set(0.5); 
+        this.maxLinesButtonR.scale.set(10); 
         this.maxLinesButtonR.position.x = 200; 
         this.maxLinesButtonL.interactive =true;
         this.maxLinesButtonR.interactive = true;

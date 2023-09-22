@@ -21,10 +21,11 @@ export class MainScene extends Scene {
 		super();
 		
 		this.bgMusic = Globals.soundResources.bgMusic;
-		this.bgMusic.play();
 		this.bgMusic.loop(true);
 		this.bgMusic.volume(0.5);
-
+		
+		if(boardConfigVar.isVisible)
+		this.bgMusic.play();
 		
 		this.board = new CreateBoard();
 		this.addChildToFullScene(this.board.board);
@@ -35,25 +36,34 @@ export class MainScene extends Scene {
 		
 		this.UiContainer = new UiContainer();
 		this.board.board.addChild(this.UiContainer)
-		this.UiContainer.textBG.position.y = this.board.slotArr[0][boardConfigVar.Matrix.y].slot.position.y + this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*3.5;
-        this.UiContainer.spin.position.y = this.board.board.position.y + this.board.board.height/2;
+		// this.UiContainer.textBG.position.y = this.board.position.y+ this.board.board.height/2 ;
+        // this.UiContainer.spin.position.y =  this.board.position.y+ this.board.board.height/2 - this.UiContainer.spin.height/2;
+        // this.UiContainer.spin.position.x =  this.board.position.x + this.board.board.width/2;
+
 		
 
-		this.board.board.position.x = window.innerWidth/2;
-		this.board.board.position.y = window.innerHeight/2;
-        // this.board.board.position.x = window.innerWidth/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor()- 200*minScaleFactor();
-        // this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5*minScaleFactor()- 270*minScaleFactor();
+        this.board.board.position.x = window.innerWidth/2;
+
+        // this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
+        this.board.board.position.y = window.innerHeight/2;
+
 
 		// this.UiContainer.textBG.position.x = this.board.board.position.x + this.UiContainer.textBG.width/2;
+		// this.board.board.position.y = window.innerHeight;
 
 	}
 
 	resize(): void {
 		super.resize();
 		this.board.board.scale.set(1.5*minScaleFactor());
-
-		this.board.board.position.x = window.innerWidth/2;
+		// - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor() - 200*minScaleFactor();
+		// - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5*minScaleFactor()- 270*minScaleFactor()
+		this.board.board.position.x = window.innerWidth/2 ;
 		this.board.board.position.y = window.innerHeight/2;
+
+		// this.UiContainer.textBG.position.y = this.board.position.y+ this.board.board.height/2 ;
+        // this.UiContainer.spin.position.y =  this.board.position.y+ this.board.board.height/2;
+        // this.UiContainer.spin.position.x =  this.board.position.x + this.board.board.width/2;
 	}
 
 	update(dt: number): void // throw new Error('Method not implemented.');
@@ -101,16 +111,18 @@ export class MainScene extends Scene {
 
 		if(msgType == "StartCheck")
 		{
-			setTimeout(()=>{this.board.checkSlot();},2000);
+			this.board.checkSlot();
 		}
 
 		if(msgType == "linesActive")
 		this.board.makelinesVisibleOnChange();
 
 		if (msgType == "resume") {
+			boardConfigVar.isVisible = true;
 			if (!this.bgMusic.playing()) this.bgMusic.play();
 		}
 		if (msgType == "pause") {
+			boardConfigVar.isVisible = false;
 			if (this.bgMusic.playing()) this.bgMusic.pause();
 		}
 

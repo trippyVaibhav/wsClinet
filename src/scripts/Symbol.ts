@@ -11,7 +11,7 @@ export class Symbol extends Sprite
     {
       let char = `Char${symbol}`;
       super(Globals.resources[char].texture);
-      
+   
       this.anchor.set(0.5);
       this.scale.set(scale);  
 

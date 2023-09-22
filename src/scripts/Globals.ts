@@ -38,13 +38,12 @@ export const boardConfigVar =  {
   boardBoxWidth : 0,
   boardBoxHeight : 0,
   Matrix : {x : 5, y : 3},
-  boardPosY : 0,
-  boardPosX : 0,
   restartPos : 650,
   // lineBet: [1 ,2 ,3 ,5 ,10 ,20 ,25 ,30 ,50 ,100 ,200 ,300 ,500 ,1000],
   lineBet: [1 ,2 ,3 ,5 ,10],
   // lineNo : [1 ,5 ,9 ,15 ,20]
-  lineNo : [1 ,2 ,3,4]
+  lineNo : [1 ,2 ,3,4],
+  isVisible : false,
 
 
 }

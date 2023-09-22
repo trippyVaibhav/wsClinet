@@ -1,5 +1,5 @@
 import { Graphics, Sprite } from "pixi.js";
-import { boardConfigVar } from "./Globals";
+import { Globals, boardConfigVar } from "./Globals";
 
 export class Slots extends Sprite {
 
@@ -7,20 +7,18 @@ export class Slots extends Sprite {
     _xIndex : number = 0;
     currentSlotSymbol : string  = "-1";
 
-    slot !: Sprite;
     constructor(position:{x: number, y: number},xIndex : number , yIndex : number)
     {
-        super();
+        super(Globals.resources.whiteBG.texture);
 
-        this.slot = new Sprite();
-       this.slot.anchor.set(0.5);
-        
-        this.slot.position.x = position.x;
-        this.slot.position.y = position.y;
+        this.anchor.set(0.5);
+        this.scale.set(0.5);
+        this.alpha = 0;
+        this.position.x = position.x;
+        this.position.y = position.y;
 
         this._xIndex = xIndex;
         this._yIndex = yIndex;
-        this.addChild(this.slot);
 
     }
 

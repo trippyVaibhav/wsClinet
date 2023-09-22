@@ -25,20 +25,22 @@ export const getPlayerCredit = async () => {
 // Api for putting Player Bet and Locking it
 export const assignPlayerBet = async () => {
 	Globals.emitter?.Call("startSpin");
-	// console.log("spini", moneyInfo.Bet, response.data);
-	const response = await axios.post(`${baseUrl}/playerBet`, {userName,password,credits:(-1)*moneyInfo.Bet})
-		.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
-    .catch(function(error) {console.log(error);});
+	// // console.log("spini", moneyInfo.Bet, response.data);
+	// const response = await axios.post(`${baseUrl}/playerBet`, {userName,password,credits:(-1)*moneyInfo.Bet})
+	// 	.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
+    // .catch(function(error) {console.log(error);});
+	setTimeout(()=>{Globals.emitter?.Call("StartCheck"); },2000)
 };
 
 
 //Api for Getting the Winning Amount for the Player.
 export const getwinBalance = async () => {
-	console.log("win", moneyInfo.score)
-	const response = await axios.post(`${baseUrl}/playerWin`, {userName,password,credits:moneyInfo.score})
-    .then((response) =>{Globals.emitter?.Call("CanSpinNow")})
-		// console.log("Won  : " + response);
-    .catch(function(error) {console.log(error);});
+	// console.log("win", moneyInfo.score)
+	// const response = await axios.post(`${baseUrl}/playerWin`, {userName,password,credits:moneyInfo.score})
+    // .then((response) =>{Globals.emitter?.Call("CanSpinNow")})
+	// 	// console.log("Won  : " + response);
+    // .catch(function(error) {console.log(error);});
+	setTimeout(()=>{Globals.emitter?.Call("CanSpinNow")},1000);
 };
 
 
