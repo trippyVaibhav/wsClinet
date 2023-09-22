@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Globals, moneyInfo } from "./Globals";
+import { Globals, moneyInfo, boardConfigVar, cookieValues } from './Globals';
 import { log } from "console";
 
 const axiosApi = axios.create({
@@ -8,17 +8,27 @@ const axiosApi = axios.create({
 });
 
 const userName = "player11";
-const password = "player11";
 const baseUrl ='https://casino-games-server.onrender.com';
+
 
 
 // API Call for GETTING Player information
 export const getPlayerCredit = async () => {
-	const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName,password})
+	console.log("Balance  :" + cookieValues.userName);
+	
+	const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName : cookieValues.userName,userToken :cookieValues.token})
     .then((response) =>{Globals.emitter?.Call("updateBalance",response.data.credits)
-		// console.log("got Player Balance : " + response.data.credits);
+		console.log("got Player Balance : " + response.data.credits);
 	})
     .catch(function(error) {console.log(error);});
+};
+
+export const initialPlayerCredit = async () => {
+	// const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName : cookieValues.userName,userToken :cookieValues.token})
+    // .then((response) =>{moneyInfo.Balance = response.data.credits;
+	// 	console.log("got Player Balance : " + response.data.credits);
+	// })
+    // .catch(function(error) {console.log(error);});
 };
 
 
@@ -26,19 +36,24 @@ export const getPlayerCredit = async () => {
 export const assignPlayerBet = async () => {
 	Globals.emitter?.Call("startSpin");
 	// console.log("spini", moneyInfo.Bet, response.data);
-	const response = await axios.post(`${baseUrl}/playerBet`, {userName,password,credits:(-1)*moneyInfo.Bet})
-		.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
-    .catch(function(error) {console.log(error);});
+	// const response = await axios.post(`${baseUrl}/playerBet`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:(-1)*moneyInfo.Bet})
+	// 	.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
+    // .catch(function(error) {console.log(error);});
+	setTimeout(()=>{Globals.emitter?.Call("StartCheck");},1000);
+	
 };
 
 
 //Api for Getting the Winning Amount for the Player.
 export const getwinBalance = async () => {
-	console.log("win", moneyInfo.score)
-	const response = await axios.post(`${baseUrl}/playerWin`, {userName,password,credits:moneyInfo.score})
-    .then((response) =>{Globals.emitter?.Call("CanSpinNow")})
-		// console.log("Won  : " + response);
-    .catch(function(error) {console.log(error);});
+// 	console.log("win", moneyInfo.score)
+// 	const response = await axios.post(`${baseUrl}/playerWin`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:moneyInfo.score})
+//     .then((response) =>{Globals.emitter?.Call("CanSpinNow")
+// 	console.log("Won  : " + response);
+// })
+//     .catch(function(error) {console.log(error);});
+
+Globals.emitter?.Call("CanSpinNow");
 };
 
 

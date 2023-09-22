@@ -32,7 +32,8 @@ export const staticData = {
 
 };
 
-export const fontData = ["FredokaOne"];
+export const fontData = ["FredokaOne","Inter"];
+
 
 
 export const LoaderSoundConfig: any = {

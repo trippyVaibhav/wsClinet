@@ -38,7 +38,6 @@ export class CreateBoard extends PIXI.Container
 
         this.addSlots();
         this.addChar();
-        this.makeLines();
 
         const frame1 = new Sprite(Globals.resources.frame1.texture);
         const frame2 = new Sprite(Globals.resources.frame2.texture);
@@ -82,6 +81,7 @@ export class CreateBoard extends PIXI.Container
         frameP4.position.x = this.board.width/2 -45;
         frameP4.position.y = -32;
 
+        this.makeLines();
 
     }
 
@@ -180,7 +180,7 @@ export class CreateBoard extends PIXI.Container
                         this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - 150;
                         else
                         {
-                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y -70;
+                            this.slotChar[i][j].position.y = this.slotChar[i][0].position.y - 100;
                         }
                     }
                 }

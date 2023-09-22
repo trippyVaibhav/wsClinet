@@ -81,7 +81,7 @@ export class UiContainer extends Container
 
         moneyInfo.score = 0;
         const progress = await  this.updateWinningAmount();
-        let newBalance = moneyInfo.Balance - moneyInfo.lineBet;
+        let newBalance = moneyInfo.Balance - moneyInfo.Bet;
         Globals.emitter?.Call("updateBalance",newBalance);
     }
 

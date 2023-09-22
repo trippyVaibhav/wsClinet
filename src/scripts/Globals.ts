@@ -56,6 +56,11 @@ export const moneyInfo = {
   Bet : 0,
 }
 
+export const cookieValues = {
+  userName : "",
+  token : "",
+}
+
 
 export const getLineinfo : any = {
   0 : {
@@ -86,6 +91,7 @@ export const getLineinfo : any = {
     yPos: 350,
     payScale : 10,
   }, 
+
   // 4 : {
   //   color : "0x00FF00",
   //   locations : [[1,4],[1,3],[1,2],[1,1],[1,0]],
@@ -238,4 +244,24 @@ export function getRandomInt( max: number) {
 
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - 2) + 2); // The maximum is exclusive and the minimum is inclusive
+}
+ 
+export function getCookie(name :string) {
+  const cookieArray = window.parent.document.cookie.split('; ');
+  for (const cookie of cookieArray) {
+    const [cookieName, cookieValue] = cookie.split('=');
+    if (cookieName === name) {
+      return cookieValue;
+    }
+  }
+  console.log("Cookie not Found");
+  
+  return null; // Cookie not found
+}
+
+export function setCookie(name: string, value: string, days: number) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  const expiresString = `expires=${expires.toUTCString()}`;
+  document.cookie = `${name}=${value};${expiresString};path=/`;
 }

@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { CalculateScaleFactor, config } from "./appConfig";
-import { Globals } from "./Globals";
+import { Globals, cookieValues, getCookie, setCookie } from "./Globals";
 // import { onResizeFunction } from "./HtmlHandler";
 import { Loader } from "./Loader";
 import { MainScene } from "./MainScene";
@@ -94,7 +94,19 @@ export class App {
 			});
 		});
 	
-	
+	   const cookieValue =  getCookie("userName");
+	   const tokenValue =  getCookie("userToken");
+
+	   if(cookieValue)
+	   {
+		   cookieValues.userName = cookieValue;
+	   }
+	   if(tokenValue)
+	   {
+		cookieValues.token = tokenValue;
+
+	   }
+
 		this.tabChange();
 		document.body.appendChild(this.app.view);
 	}
