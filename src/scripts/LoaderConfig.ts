@@ -32,7 +32,7 @@ export const staticData = {
 
 };
 
-export const fontData = ["FredokaOne","Inter"];
+export const fontData = ["Inter"];
 
 
 

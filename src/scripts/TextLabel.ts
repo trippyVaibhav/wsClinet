@@ -4,7 +4,7 @@ import { Text } from "pixi.js";
 export class TextLabel extends Text {
 
 
-    constructor(x: number, y: number, anchor: number, textToShow: string, size: number, public defaultColor: number = 0xff7f50, font: string = "FredokaOne") {
+    constructor(x: number, y: number, anchor: number, textToShow: string, size: number, public defaultColor: number = 0xff7f50, font: string = "Inter") {
         super(textToShow);
 
         this.x = x;

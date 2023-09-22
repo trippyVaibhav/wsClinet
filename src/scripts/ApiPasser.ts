@@ -21,14 +21,16 @@ export const getPlayerCredit = async () => {
 		console.log("got Player Balance : " + response.data.credits);
 	})
     .catch(function(error) {console.log(error);});
+
+	// Globals.emitter?.Call("updateBalance",200)
 };
 
 export const initialPlayerCredit = async () => {
-	// const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName : cookieValues.userName,userToken :cookieValues.token})
-    // .then((response) =>{moneyInfo.Balance = response.data.credits;
-	// 	console.log("got Player Balance : " + response.data.credits);
-	// })
-    // .catch(function(error) {console.log(error);});
+	const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName : cookieValues.userName,userToken :cookieValues.token})
+    .then((response) =>{moneyInfo.Balance = response.data.credits;
+		console.log("got Player Balance : " + response.data.credits);
+	})
+    .catch(function(error) {console.log(error);});
 };
 
 
@@ -36,24 +38,24 @@ export const initialPlayerCredit = async () => {
 export const assignPlayerBet = async () => {
 	Globals.emitter?.Call("startSpin");
 	// console.log("spini", moneyInfo.Bet, response.data);
-	// const response = await axios.post(`${baseUrl}/playerBet`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:(-1)*moneyInfo.Bet})
-	// 	.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
-    // .catch(function(error) {console.log(error);});
-	setTimeout(()=>{Globals.emitter?.Call("StartCheck");},1000);
-	
+	const response = await axios.post(`${baseUrl}/playerBet`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:(-1)*moneyInfo.Bet})
+		.then((response) =>{ Globals.emitter?.Call("StartCheck"); })
+    .catch(function(error) {console.log(error);});
+
+	// Globals.emitter?.Call("StartCheck");
 };
 
 
 //Api for Getting the Winning Amount for the Player.
 export const getwinBalance = async () => {
-// 	console.log("win", moneyInfo.score)
-// 	const response = await axios.post(`${baseUrl}/playerWin`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:moneyInfo.score})
-//     .then((response) =>{Globals.emitter?.Call("CanSpinNow")
-// 	console.log("Won  : " + response);
-// })
-//     .catch(function(error) {console.log(error);});
+	console.log("win", moneyInfo.score)
+	const response = await axios.post(`${baseUrl}/playerWin`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:moneyInfo.score})
+    .then((response) =>{Globals.emitter?.Call("CanSpinNow")
+	console.log("Won  : " + response);
+})
+    .catch(function(error) {console.log(error);});
 
-Globals.emitter?.Call("CanSpinNow");
+	// Globals.emitter?.Call("CanSpinNow")
 };
 
 

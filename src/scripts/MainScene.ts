@@ -99,6 +99,17 @@ export class MainScene extends Scene {
 
 			this.UiContainer.spin.interactive = true;
 			this.UiContainer.spin.alpha = 1;
+
+			if(moneyInfo.Balance - moneyInfo.Bet >= 0)
+			{
+				this.UiContainer.spin.interactive = true;
+				this.UiContainer.spin.alpha = 1;
+			}
+			if(moneyInfo.Balance - moneyInfo.Bet < 0)
+			{
+				this.UiContainer.spin.interactive = false;
+				this.UiContainer.spin.alpha = 0.5;
+			}
 			getPlayerCredit();
 		}
 		if(msgType == "updateBalance")

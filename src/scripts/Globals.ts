@@ -49,7 +49,7 @@ export const boardConfigVar =  {
 }
 
 export const moneyInfo = {
-  Balance : 0, 
+  Balance : 40, 
   score : 0,
   lineBet : 1,
   maxLines : 1,

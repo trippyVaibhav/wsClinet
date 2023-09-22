@@ -68,7 +68,18 @@ export class UiContainer extends Container
         this.betText.position.x = this.textBG.width*0.5;
         this.betText.anchor.set(1,0.5);
  
-        this.textBG.addChild(this.betText);   
+        this.textBG.addChild(this.betText); 
+        
+        if(moneyInfo.Balance - moneyInfo.Bet >= 0)
+        {
+            this.spin.interactive = true;
+            this.spin.alpha = 1;
+        }
+        if(moneyInfo.Balance - moneyInfo.Bet < 0)
+        {
+            this.spin.interactive = false;
+            this.spin.alpha = 0.5;
+        }
     }
 
     async callSpin()
@@ -101,6 +112,16 @@ export class UiContainer extends Container
     {
         moneyInfo.Bet = (moneyInfo.maxLines+1)*moneyInfo.lineBet;
         this.betText.updateLabelText( `Bet  :  ${moneyInfo.Bet}`);
+        if(moneyInfo.Balance - moneyInfo.Bet >= 0)
+        {
+            this.spin.interactive = true;
+            this.spin.alpha = 1;
+        }
+        if(moneyInfo.Balance - moneyInfo.Bet < 0)
+        {
+            this.spin.interactive = false;
+            this.spin.alpha = 0.5;
+        }
     }
 
 
