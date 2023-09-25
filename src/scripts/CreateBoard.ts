@@ -39,48 +39,6 @@ export class CreateBoard extends PIXI.Container
         this.addSlots();
         this.addChar();
 
-        const frame1 = new Sprite(Globals.resources.frame1.texture);
-        const frame2 = new Sprite(Globals.resources.frame2.texture);
-        const frame3 = new Sprite(Globals.resources.frame3.texture);
-        const frame4 = new Sprite(Globals.resources.frame4.texture);
-        const frameP1 = new Sprite(Globals.resources.frameP1.texture);
-        const frameP2 = new Sprite(Globals.resources.frameP2.texture);
-        const frameP3= new Sprite(Globals.resources.frameP3.texture);
-        const frameP4 = new Sprite(Globals.resources.frameP4.texture);
-
-        // frame1.anchor.set(0.5);
-        // frame2.anchor.set(0.5);
-        // frame3.anchor.set(0.5);
-        // frame4.anchor.set(0.5);
-        // frameP1.anchor.set(0.5);
-        // frameP2.anchor.set(0.5);
-        // frameP3.anchor.set(0.5);
-        // frameP4.anchor.set(0.5);
-
-        this.board.addChild(frame1,frame2,frame3,frame4,frameP1,frameP2,frameP3,frameP4);
-
-        frame1.position.y = -this.board.height/2-45;
-        frame1.position.x = -this.board.width/2-45;
-
-        frame2.position.y = -this.board.height/2 - 45;
-
-        // frame3.position.x = this.board.height/2;
-        // frame3.position.y = this.board.height/2;
-
-        frame4.position.x = -this.board.width/2-45;
-
-        frameP1.position.y = -this.board.height/2-45;
-        frameP1.position.x = -35;
-
-        frameP2.position.y = this.board.height/2 -45;
-        frameP2.position.x = -35;
-
-        frameP3.position.x = -this.board.width/2 -45;
-        frameP3.position.y = -32;
-
-        frameP4.position.x = this.board.width/2 -45;
-        frameP4.position.y = -32;
-
         this.makeLines();
 
     }
@@ -115,7 +73,7 @@ export class CreateBoard extends PIXI.Container
 
     addChar()
     {
-       let xPos = this.slotArr[0][0].position.x;
+       let xPos = this.slotArr[0][0].position.x + 20;
        let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y;
 
        const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
@@ -131,7 +89,7 @@ export class CreateBoard extends PIXI.Container
                 this.slotChar[i][j].mask = this.charMask;
                 this.board.addChild(char);
             }
-            xPos += this.slotArr[0][0].width+20;
+            xPos += this.slotArr[0][0].width+30;
             yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y;
         }
     }

@@ -6,7 +6,8 @@ import { config } from './appConfig';
 import { Howl, Howler } from 'howler';
 import "pixi-spine";
 import FFC from 'fontfaceobserver';
-import { BackgroundGraphic } from './Background';
+import { BackgroundGraphic, BackgroundSprite, Background } from './Background';
+import { log } from 'console';
 // import { BackgroundGraphic } from './Background';
 
 export class Loader {
@@ -24,7 +25,10 @@ export class Loader {
 
     createLoadingPage(container: PIXI.Container) {
         //background
-        const background = new BackgroundGraphic(window.innerWidth, window.innerHeight, 0x80C8BC);
+
+        const Background = PIXI.Sprite.from(staticData.Background);
+
+        const background = new BackgroundSprite(Background.texture,window.innerWidth, window.innerHeight);
         background.width = window.innerWidth;
         background.height = window.innerHeight;
         container.addChild(background);
@@ -34,8 +38,9 @@ export class Loader {
 
         const logo = PIXI.Sprite.from(staticData.logoURL);
 
-        logo.anchor.set(0.5, 1);
-        logo.x = config.logicalWidth / 2;
+        logo.anchor.set(0.5,1);
+        logo.scale.set(0.5)
+        logo.x = config.logicalWidth / 2 - logo.width/2;
         logo.y = config.logicalHeight / 2;
 
         const progressBox = new PIXI.Graphics()

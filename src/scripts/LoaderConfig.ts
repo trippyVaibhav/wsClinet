@@ -1,3 +1,4 @@
+import { Background } from './Background';
 export const LoaderConfig = {
     backGround : require("../sprites/Gamesprite/BG.png"),
     Bottom : require("../sprites/Bottom.png"),
@@ -8,18 +9,20 @@ export const LoaderConfig = {
     Char3 :  require("../sprites/Gamesprite/Char4.png"),
     Char4 :  require("../sprites/Gamesprite/Char5.png"),
     Char5 :  require("../sprites/Gamesprite/Char6.png"),
+    Char6 :  require("../sprites/Gamesprite/Char7.png"),
+    Char7 :  require("../sprites/Gamesprite/Char8.png"),
+    Char8 :  require("../sprites/Gamesprite/Char9.png"),
+    Char9 :  require("../sprites/Gamesprite/Char10.png"),
     arrL : require("../sprites/Gamesprite/LeftButton.png"),
     arrR : require("../sprites/Gamesprite/RightButton.png"),
     frame : require("../sprites/Gamesprite/Frame.png"),
     whiteBG : require("../sprites/whiteBG.png"),
-    frame1 :require("../sprites/Gamesprite/Vector-1.png"),
-    frame2 :require("../sprites/Gamesprite/Vector-2.png"),
-    frame3 :require("../sprites/Gamesprite/Vector-3.png"),
-    frame4 :require("../sprites/Gamesprite/Vector-4.png"),
-    frameP1 :require("../sprites/Gamesprite/VectorP1.png"),
-    frameP2 :require("../sprites/Gamesprite/VectorP2.png"),
-    frameP3 :require("../sprites/Gamesprite/VectorP3.png"),
-    frameP4 :require("../sprites/Gamesprite/VectorP4.png"),
+    ButtonBg  :require("../sprites/Gamesprite/ButtonBG.png"),
+    ButtonBg1  :require("../sprites/Gamesprite/ButtonBG1.png"),
+    ButtonBg2  :require("../sprites/Gamesprite/ButtonBG2.png"),
+
+
+
 
 
     
@@ -29,6 +32,8 @@ export const LoaderConfig = {
 export const staticData = {
     // logoURL: "https://cccdn.b-cdn.net/1584464368856.png",
     logoURL: require("/static/logo.png").default,
+    Background: require("/static/Background.png").default,
+
 
 };
 

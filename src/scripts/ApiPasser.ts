@@ -10,11 +10,14 @@ const axiosApi = axios.create({
 const userName = "player11";
 const baseUrl ='https://casino-games-server.onrender.com';
 
+// cookieValues.userName = "Player11";
 
 
 // API Call for GETTING Player information
 export const getPlayerCredit = async () => {
-	console.log("Balance  :" + cookieValues.userName);
+	// console.log("Balance  :" + cookieValues.userName);
+
+	
 	
 	const response = await axios.post(`${baseUrl}/getPlayerCredit`, {userName : cookieValues.userName,userToken :cookieValues.token})
     .then((response) =>{Globals.emitter?.Call("updateBalance",response.data.credits)
@@ -22,7 +25,7 @@ export const getPlayerCredit = async () => {
 	})
     .catch(function(error) {console.log(error);});
 
-	// Globals.emitter?.Call("updateBalance",200)
+	// Globals.emitter?.Call("updateBalance",1000)
 };
 
 export const initialPlayerCredit = async () => {
