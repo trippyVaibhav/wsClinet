@@ -10,10 +10,14 @@ export class Symbol extends Sprite
     constructor(scale : number,symbol: string,position :{x: number, y :number})
     {
       let char = `Char${symbol}`;
-      super(Globals.resources[char].texture);
-   
+      super(Globals.resources.symbolSlot.texture);
+      // 
+      const symbolChar =new Sprite(Globals.resources[char].texture);
+      this.addChild(symbolChar);
+      symbolChar.anchor.set(0.5);
+
       this.anchor.set(0.5);
-      this.scale.set(scale);  
+      this.scale.set(0.8);  
 
       this.symbol = symbol;
       this.position.x = position.x;
@@ -22,12 +26,12 @@ export class Symbol extends Sprite
 
     tweenToSlot(ypos : number, pos : boolean )
     {
-      let newPos  = this.position.y + ypos;
+      let newPos  = this.position.y + ypos ;
       if(!pos)
       {
         this.shouldMove = false;
         const tween = new Tween(this)
-        .to({y : newPos},500)
+        .to({y : newPos},1000)
         .easing(Easing.Back.InOut)
         .start();
       }

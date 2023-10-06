@@ -20,6 +20,8 @@ export const LoaderConfig = {
     ButtonBg  :require("../sprites/Gamesprite/ButtonBG.png"),
     ButtonBg1  :require("../sprites/Gamesprite/ButtonBG1.png"),
     ButtonBg2  :require("../sprites/Gamesprite/ButtonBG2.png"),
+    symbolSlot  :require("../sprites/symbolSlot.png"),
+
 
 
 

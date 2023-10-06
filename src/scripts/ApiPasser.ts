@@ -53,7 +53,7 @@ export const assignPlayerBet = async () => {
 export const getwinBalance = async () => {
 	console.log("win", moneyInfo.score)
 	const response = await axios.post(`${baseUrl}/playerWin`, {userName : cookieValues.userName,userToken :cookieValues.token,credits:moneyInfo.score})
-    .then((response) =>{Globals.emitter?.Call("CanSpinNow")
+    .then((response) =>{ setTimeout(()=>{Globals.emitter?.Call("CanSpinNow")},2000);
 	console.log("Won  : " + response);
 })
     .catch(function(error) {console.log(error);});

@@ -35,7 +35,7 @@ export class MainScene extends Scene {
 
 		
 		this.UiContainer = new UiContainer();
-		this.board.board.addChild(this.UiContainer)
+		this.board.board.addChild(this.UiContainer);
 		// this.UiContainer.textBG.position.y = this.board.position.y+ this.board.board.height/2 ;
         // this.UiContainer.spin.position.y =  this.board.position.y+ this.board.board.height/2 - this.UiContainer.spin.height/2;
         // this.UiContainer.spin.position.x =  this.board.position.x + this.board.board.width/2;

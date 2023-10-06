@@ -34,9 +34,8 @@ export class UiContainer extends Container
 
         this.spin = new Sprite(Globals.resources.Sprint.texture);
         this.spin.anchor.set(1,0.5);
-        this.spin.scale.set(0.9);
+        this.spin.scale.set(0.7);
         this.spin.position.y = 250;
-        this.spin.position.x = window.innerWidth -this.spin.width*3 ;
 
         
         this.addChild(this.spin);
@@ -50,6 +49,7 @@ export class UiContainer extends Container
         })
 
         getPlayerCredit();
+        this.lineBetText();
 
         this.wonAmountText = new TextLabel(0, 0, 0.5, `Won  :  ${moneyInfo.score}`, 20, 0xF2AE33 );
         this.wonAmountText.position.x = 0;
@@ -59,9 +59,7 @@ export class UiContainer extends Container
         this.wonButton.anchor.set(0.5);
         this.wonButton.scale.set(0.8);
 
-        this.wonButton.position.x = this.spin.position.x - this.spin.width*1.4;
         this.wonButton.position.y = 250;
-
         this.addChild(this.wonButton);
         this.wonButton.addChild(this.wonAmountText);
 
@@ -85,7 +83,7 @@ export class UiContainer extends Container
         this.betButton.anchor.set(0.5);
         this.betButton.scale.set(0.8);
 
-        this.betButton.position.x = this.wonButton.position.x - this.wonButton.width -5;
+        this.betButton.position.x = this.lineBetButton.position.x + this.lineBetButton.width*1.05;
         this.betButton.position.y = 250;
         this.betText.anchor.set(1,0.5);
  
@@ -103,10 +101,13 @@ export class UiContainer extends Container
             this.spin.interactive = false;
             this.spin.alpha = 0.5;
         }
-        this.lineBetText();
-        this.balanceButton.position.x = this.lineBetButton.position.x - this.lineBetButton.width -5;
-
         this.payLineText();
+        this.wonButton.position.x = this.betButton.position.x + this.betButton.width*1.05;
+        this.balanceButton.position.x = this.lineBetButton.position.x - this.lineBetButton.width*1.05;
+        this.spin.position.x =  this.wonButton.position.x + this.wonButton.width*1.6;
+        this.paylinesButton.position.x =  this.balanceButton.position.x - this.balanceButton.width*1.05;
+
+
      
     }
 
@@ -162,7 +163,7 @@ export class UiContainer extends Container
         this.lineBetButton = new Sprite(Globals.resources.ButtonBg.texture)
         this.lineBetButton.anchor.set(0.5);
 
-        this.lineBetButton.position.x = this.betButton.position.x - this.betButton.width -5;
+        this.lineBetButton.position.x = -this.lineBetButton.width/2;
         this.lineBetButton.position.y = 250;
         this.lineBetButton.scale.set(0.8);
 
@@ -241,7 +242,6 @@ export class UiContainer extends Container
         this.paylinesButton = new Sprite(Globals.resources.ButtonBg2.texture)
         this.paylinesButton.anchor.set(0.5);
         this.paylinesButton.scale.set(0.8);
-        this.paylinesButton.position.x =  this.balanceButton.position.x - this.balanceButton.width -5;
         this.paylinesButton.position.y = 250;
 
         this.addChild(this.paylinesButton);
