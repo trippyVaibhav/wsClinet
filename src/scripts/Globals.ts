@@ -20,6 +20,8 @@ type globalDataType = {
   soundResources: { [key: string]: Howl };
 
   App: App | undefined,
+  isVisible : boolean,
+  onMusic : boolean,
 }
 
 export const Globals: globalDataType = {
@@ -32,6 +34,8 @@ export const Globals: globalDataType = {
   // fpsStats: undefined,
   App: undefined,
   soundResources: {},
+  isVisible : true,
+  onMusic : true,
 };
 
 export const boardConfigVar =  {
@@ -43,9 +47,6 @@ export const boardConfigVar =  {
   lineBet: [1 ,2 ,3 ,5 ,10],
   // lineNo : [1 ,5 ,9 ,15 ,20]
   lineNo : [1 ,2 ,3,4],
-  isVisible : false,
-
-
 }
 
 export const moneyInfo = {
@@ -67,7 +68,7 @@ export const getLineinfo : any = {
     color : "0xD32323",
     locations : [[0,0],[0,1],[0,2],[0,3],[0,4]],
     xPos : false,
-    yPos: 10,
+    yPos: 60,
     payScale : 10,
   }, 
   1 : {
@@ -88,7 +89,7 @@ export const getLineinfo : any = {
     color : "0x800080",
     locations : [[2,0],[2,1],[2,2],[2,3],[2,4]],
     xPos : false,
-    yPos: 350,
+    yPos: 400,
     payScale : 10,
   }, 
 
@@ -137,11 +138,11 @@ export const getLineinfo : any = {
 }
 
 export const slotCharArr = {
-  charArr : [['8',"2","1","3","2","4","2","4","5"],
-             ['2',"2","1","2","3","5","1","7","6"],
-             ['6',"2","1","3","6","4","2","1","7"],
-             ['5',"1","5","1","3","4","5","8","8"],
-             ['4',"9","1","1","2","4","1","9","9"],
+  charArr : [['0',"2","7","3","2","4","2","8","0"],
+             ['2',"2","7","0","8","8","1","7","6"],
+             ['6',"2","8","3","6","0","2","8","7"],
+             ['5',"1","5","2","3","9","5","8","8"],
+             ['0',"9","1","4","8","7","1","8","0"],
             ]
 } 
 

@@ -1,5 +1,5 @@
 // import * as PIXI from "pixi.js";
-import { Graphics } from "pixi.js";
+import { Graphics, Sprite } from "pixi.js";
 import { Scene } from "./Scene";
 import { CreateBoard } from "./CreateBoard";
 import { Globals, boardConfig, boardConfigVar, moneyInfo } from "./Globals";
@@ -9,12 +9,15 @@ import { log } from "console";
 import { assignPlayerBet, getPlayerCredit, getwinBalance } from "./ApiPasser";
 import { config, maxScaleFactor, minScaleFactor } from './appConfig';
 import { Howl } from "howler";
+import { TextLabel } from "./TextLabel";
 
 export class MainScene extends Scene {
   	
 	board !: CreateBoard;
 	UiContainer !: UiContainer;
 	bgMusic!: Howl;
+	musicButton!: Sprite;
+	
 	
 	constructor() {
 	
@@ -24,7 +27,7 @@ export class MainScene extends Scene {
 		this.bgMusic.loop(true);
 		this.bgMusic.volume(0.5);
 		
-		if(boardConfigVar.isVisible)
+		if(Globals.isVisible && Globals.onMusic)
 		this.bgMusic.play();
 		
 		this.board = new CreateBoard();
@@ -36,6 +39,8 @@ export class MainScene extends Scene {
 		
 		this.UiContainer = new UiContainer();
 		this.board.board.addChild(this.UiContainer);
+
+		this.createMusicButton();
 		// this.UiContainer.textBG.position.y = this.board.position.y+ this.board.board.height/2 ;
         // this.UiContainer.spin.position.y =  this.board.position.y+ this.board.board.height/2 - this.UiContainer.spin.height/2;
         // this.UiContainer.spin.position.x =  this.board.position.x + this.board.board.width/2;
@@ -45,7 +50,7 @@ export class MainScene extends Scene {
         this.board.board.position.x = window.innerWidth/2;
 
         // this.board.board.position.y = window.innerHeight/2 - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*2.2;
-        this.board.board.position.y = window.innerHeight/2;
+        this.board.board.position.y = window.innerHeight/2 - 50;
 
 
 		// this.UiContainer.textBG.position.x = this.board.board.position.x + this.UiContainer.textBG.width/2;
@@ -59,7 +64,10 @@ export class MainScene extends Scene {
 		// - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.width*2.5*minScaleFactor() - 200*minScaleFactor();
 		// - this.board.slotArr[0][boardConfigVar.Matrix.y].slot.height*1.5*minScaleFactor()- 270*minScaleFactor()
 		this.board.board.position.x = window.innerWidth/2 ;
-		this.board.board.position.y = window.innerHeight/2;
+		this.board.board.position.y = window.innerHeight/2 - 50;
+		
+		this.musicButton.scale.set(1.2*minScaleFactor());
+		this.musicButton.position.x = window.innerWidth - this.musicButton.width/2 - 10;
 
 		// this.UiContainer.textBG.position.y = this.board.position.y+ this.board.board.height/2 ;
         // this.UiContainer.spin.position.y =  this.board.position.y+ this.board.board.height/2;
@@ -85,6 +93,7 @@ export class MainScene extends Scene {
 			this.board.makelinesInvisible();
 
 			const spinMusic = Globals.soundResources.onSpin;
+			if(Globals.isVisible && Globals.onMusic)
 			spinMusic.play();
 			spinMusic.volume(0.5);
 		}
@@ -129,11 +138,11 @@ export class MainScene extends Scene {
 		this.board.makelinesVisibleOnChange();
 
 		if (msgType == "resume") {
-			boardConfigVar.isVisible = true;
+			if(Globals.onMusic)
 			if (!this.bgMusic.playing()) this.bgMusic.play();
 		}
 		if (msgType == "pause") {
-			boardConfigVar.isVisible = false;
+			if(!Globals.onMusic)
 			if (this.bgMusic.playing()) this.bgMusic.pause();
 		}
 
@@ -143,5 +152,41 @@ export class MainScene extends Scene {
 		
 
 	}
-	
+	createMusicButton()
+    {
+        
+        this.musicButton = new Sprite(Globals.resources.ButtonBg.texture);
+		this.musicButton.anchor.set(0.5);
+		this.musicButton.scale.set(1.2*minScaleFactor());
+        
+		this.musicButton.interactive = true;
+        this.musicButton.buttonMode = true;
+        this.musicButton.alpha = 0.8;
+		this.musicButton.position.x = window.innerWidth - this.musicButton.width/2 - 10;
+		this.musicButton.position.y = this.musicButton.height/2 + 20 ;
+		this.addChildToFullScene(this.musicButton);
+
+        const musicText = new TextLabel(0, 0, 0.5,"Music On", 20, 0xFFFFFF );
+        this.musicButton.addChild(musicText);
+
+
+
+
+        this.musicButton.on("pointerdown",()=>{
+            Globals.onMusic = !Globals.onMusic;
+
+            if(Globals.onMusic)
+            {
+                musicText.updateLabelText("Music On")
+                Globals.emitter?.Call("resume");
+            }
+            else
+            {
+                musicText.updateLabelText("Music Off")
+                Globals.emitter?.Call("pause");
+            }    
+            
+        })
+
+    }
 }

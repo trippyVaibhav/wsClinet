@@ -94,18 +94,18 @@ export class App {
 			});
 		});
 	
-	   const cookieValue =  getCookie("userName");
-	   const tokenValue =  getCookie("userToken");
+	//    const cookieValue =  getCookie("userName");
+	//    const tokenValue =  getCookie("userToken");
 
-	   if(cookieValue)
-	   {
-		   cookieValues.userName = cookieValue;
-	   }
-	   if(tokenValue)
-	   {
-		cookieValues.token = tokenValue;
+	//    if(cookieValue)
+	//    {
+	// 	   cookieValues.userName = cookieValue;
+	//    }
+	//    if(tokenValue)
+	//    {
+	// 	cookieValues.token = tokenValue;
 
-	   }
+	//    }
 
 		this.tabChange();
 		document.body.appendChild(this.app.view);
@@ -113,11 +113,13 @@ export class App {
 
 	tabChange() {
 		document.addEventListener("visibilitychange", (event) => {
-			if (document.visibilityState === "visible") {
-				Globals.emitter?.Call("resume");
-			} else {
-				Globals.emitter?.Call("pause");
-			}
+		if (document.hidden) {
+			Globals.emitter?.Call("pause");
+			Globals.isVisible = false;
+		} else {
+			Globals.emitter?.Call("resume");
+			Globals.isVisible = true;
+		}
 		});
 	}
 

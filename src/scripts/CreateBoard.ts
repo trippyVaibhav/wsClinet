@@ -5,6 +5,7 @@ import { Lines } from "./Lines";
 import { Slots } from './Slots';
 import { Symbol } from "./Symbol";
 import { getwinBalance } from "./ApiPasser";
+import { maxScaleFactor } from './appConfig';
 
 export class CreateBoard extends PIXI.Container
 {
@@ -16,6 +17,8 @@ export class CreateBoard extends PIXI.Container
     charMask !: Graphics;
     winningSlots : Symbol[][] = [];
 
+    blinkInterval!: NodeJS.Timer;
+    linesToBlink : number[]  = [];
     constructor()
     {
         super();
@@ -43,6 +46,7 @@ export class CreateBoard extends PIXI.Container
         boardConfigVar.restartPos = this.board.position.y + this.slotChar[0][0].height*3;
     }
 
+    
     addSlots()
     { 
         let positionX = -this.board.width/2 ;
@@ -73,10 +77,10 @@ export class CreateBoard extends PIXI.Container
 
     addChar()
     {
-       let xPos = this.slotArr[0][0].position.x +10;
-       let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y ;
+        const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
+        let xPos = this.slotArr[0][0].position.x +10;
+        let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y ;
 
-       const shuffledArray: string[][] = this.shuffle2DArray(slotCharArr.charArr);
         for(let i =0 ;  i < shuffledArray.length ; i ++)
         {
             this.slotChar[i] = []; 
@@ -89,7 +93,7 @@ export class CreateBoard extends PIXI.Container
                 this.slotChar[i][j].mask = this.charMask;
                 this.board.addChild(char);
             }
-            xPos += this.slotArr[0][0].width+30;
+            xPos += this.slotArr[0][0].width+20;
             yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y;
         }
     }
@@ -123,7 +127,7 @@ export class CreateBoard extends PIXI.Container
         return lineArray;
     }
  
-    update(dt : number)
+     update(dt : number)
     {
         for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )
         {
@@ -131,91 +135,104 @@ export class CreateBoard extends PIXI.Container
             {
                 if(this.slotChar[i][j].shouldMove)
                 {
-                    this.slotChar[i][j].position.y += 20*dt;
-                    if( this.slotChar[i][j].position.y >= boardConfigVar.restartPos)
-                    {   
-                        
-                        if(j != 8)
-                        {
-                            this.slotChar[i][j].position.y = this.slotChar[i][j+1].position.y - this.slotChar[i][j].height;
-                        }
-                        else
-                        this.slotChar[i][j].position.y = this.slotChar[i][0].position.y - this.slotChar[i][j].height/4;
+                  this.slotChar[i][j].position.y += 20*dt;
+                }
+        }}
+        for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )
+        {
+            for(let j = slotCharArr.charArr[0].length-1; j >=0 ; j--)
+            {
+                if( this.slotChar[i][j].position.y >= boardConfigVar.restartPos)
+                {   
+                    let index = j+1;
+
+                    if(index >=this.slotChar[i].length)
+                    index = 0;
                     
-                    console.log(i,j);
-                    }
+                    this.slotChar[i][j].position.y = this.slotChar[i][index].position.y - this.slotChar[i][j].height;
                 }
             }
         }
     }
 
+
     checkSlot()
     {               
       
-        let row : number  = 0;
-        for(let j = 0 ; j < this.slotChar.length ; j++)
+      for(let j = 0 ; j < this.slotChar.length ; j++)
         {
+
+        setTimeout(()=>{
             for(let i = 0 ; i < this.slotChar[0].length ; i++)
             {
-                setTimeout(()=>{
-                if( this.slotChar[j][i].position.y >   -this.board.height/2 - this.slotArr[0][1].height
-                    && this.slotChar[j][i].position.y < 0 ) 
+                if( this.slotChar[j][i].position.y >  this.slotArr[0][0].position.y - this.slotArr[0][0].height*3
+                    && this.slotChar[j][i].position.y < 0  ) 
                     {
-                        if(row != undefined && row != 0 &&row == j)
-                        {
-                            return;
-                        }
-                        row = j;
-                        
                         this.addOnSlot(i,j)
+                        break;
                     }
-                },500*(j+1))
-            }
+                    }
+                }
+        ,300*(j+1))
         }
+        setTimeout(()=>{this.checkWinPaylines()},3000);
     }
         ///END Position this.slotArr[0][boardConfigVar.Matrix.y].slot.width*2
 
     addOnSlot(winningIndex : number, rowNumber : number)
     {
+        this.linesToBlink = [];
         // console.log(this.slotChar);
         
         // console.log("Row Number :  "+ rowNumber + "winningIndex  : "+ winningIndex);
-        for(let  i = 0 ; i  <  this.slotArr.length ; i++)
+        for(let  j = 0 ; j  < this.slotArr.length ; j++)
         {
-            let index = (winningIndex -( this.slotArr.length-1)+(i+1));
+            
+            let index = winningIndex - j;
             
             if(index > 8  )
             index = Math.abs(index - 9);
 
             if( index < 0)
-            index = Math.abs(index - 8);
-
-            // console.log("Index1  :  "+ index);
-        
-        index = Math.abs(index -1)
-        // console.log("row  :  "+ rowNumber);
-        
-        // console.log("Index2  :  "+ index);
-            // console.log(this.slotChar[rowNumber][index].symbol);
-            this.slotArr[i][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
-        }
-
-        
-        let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y -   this.slotChar[rowNumber][winningIndex].position.y;
-        for(let j = 0; j  < slotCharArr.charArr[0].length ; j++)
-        {
-            this.slotChar[rowNumber][j].tweenToSlot(yPos,false);
-            // yPos -= 150;
-            if(rowNumber == boardConfigVar.Matrix.x-1 && j == slotCharArr.charArr[0].length-1)
             {
-                this.checkWinPaylines();
-            //    this.getSlotCurrentSymbols(); 
+              index = 9 - Math.abs(index);
             }
+
+            if(index == -1)
+            index = 8;
+            // console.log(index,winningIndex);
+
+            this.slotArr[(this.slotArr.length-1)-j][rowNumber].currentSlotSymbol = this.slotChar[rowNumber][index].symbol;
+            if(j == this.slotArr.length-1)
+            {
+                this.moveSlots(winningIndex,rowNumber);
+            }
+        }
+    }
+
+    moveSlots(winningIndex : number,rowNumber : number)
+    {
+        let yPos = this.slotArr[boardConfigVar.Matrix.y-1][0].position.y - this.slotChar[rowNumber][winningIndex].position.y;
+
+        for(let j = winningIndex; j  < winningIndex + (slotCharArr.charArr[0].length) ; j++)
+        {
+            let index = j;
+
+            if(index > 8  )
+            index = Math.abs(index - 9);
+
+            if( index < 0)
+            {
+              index = 9 - Math.abs(index);
+            }
+            this.slotChar[rowNumber][index].tweenToSlot(yPos,false);
         }
     }
 
     startSpin()
     {
+        clearInterval(this.blinkInterval);
+
         for(let i =slotCharArr.charArr.length-1 ;  i >= 0 ; i -- )
         {
             for(let j = slotCharArr.charArr[0].length-1; j >=0 ; j--)
@@ -227,43 +244,52 @@ export class CreateBoard extends PIXI.Container
 
     checkWinPaylines()
     {
+        // this.getSlotCurrentSymbols(); 
+
         const entries = Object.entries(getLineinfo);
         let points  = 0;
         for(let i = 0; i < moneyInfo.maxLines+1 ; i++)
         {
             let  lineInfo = getLineinfo[i]; 
-            let lastSymbol = undefined; 
-          for(let j = 0; j < lineInfo.locations.length ; j ++)
+            let lastSymbol =   this.slotArr[lineInfo.locations[0][0]][lineInfo.locations[0][1]].currentSlotSymbol; 
+            let shouldCheck = true;
+
+          for(let j = 1; j < lineInfo.locations.length ; j ++)
           {
             let xIndex =lineInfo.locations[j][0];
             let yIndex =lineInfo.locations[j][1]; 
-            let linePoints = 0;
             
         //    console.log("xIndex  : " + xIndex + "yIndex  : " + yIndex);
         //    console.log("Last Symbol : " + lastSymbol + "Current Symbol : " + this.slotArr[xIndex][yIndex].currentSlotSymbol);
-           if(lastSymbol && lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol)
-           {
+            if(lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol )shouldCheck = true;
+            if( lastSymbol == this.slotArr[xIndex][yIndex].currentSlotSymbol && shouldCheck)
+            {
                 // console.log( "Last Symbol xIndex  :  " +  xIndex + "  Last Symbol yIndex : " +yIndex); 
                 // console.log( "Last Symbol  :  " + lastSymbol + "  new Symbol : " +this.slotArr[xIndex][yIndex].currentSlotSymbol); 
-                // console.log("Current Line Points On Connecting  : " +linePoints);
-             
-               points++;
-               linePoints++;
-           }
-            else if(lastSymbol && linePoints == 0 )
+                points++; 
+
+                if(this.linesToBlink.length == 0)
+                {
+                 this.linesToBlink.push(i);
+                }
+
+                if(!this.linesToBlink.includes(i,0))
+                this.linesToBlink.push(i);
+                shouldCheck = false;
+            }
+            else 
             {
             //  console.log("Current Line Points  : " +linePoints);
+            // console.log(shouldCheck);
             // console.log("-----------------------------------------");
-                    lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
-            }   
-            else if(lastSymbol && linePoints >0 )
+            if(shouldCheck)
             {
-                // console.log("not same ");
-                break;
+                lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
+                shouldCheck = true;
             }
-            
-            if(lastSymbol == undefined)
-            lastSymbol = this.slotArr[xIndex][yIndex].currentSlotSymbol;
+            else
+            break;
+            }   
           }
         }
         // console.log("points : " + points);
@@ -271,12 +297,14 @@ export class CreateBoard extends PIXI.Container
         {
             const winMusic = Globals.soundResources.onWin;
 			winMusic.volume(0.5);
+			if(Globals.isVisible && Globals.onMusic)
 			winMusic.play();
+
+            this.blinkLines();
         }
         moneyInfo.score = points*moneyInfo.lineBet;
         Globals.emitter?.Call("WonAmount");
         getwinBalance();
-        // this.getSlotCurrentSymbols()
         return;
     }
 
@@ -325,6 +353,8 @@ export class CreateBoard extends PIXI.Container
       makelinesVisibleOnChange()
       {
         // console.log(moneyInfo.maxLines);
+        clearInterval(this.blinkInterval);
+
         for(let i = 0 ; i  < this.lines.length ; i++)
         {
             if(i <= moneyInfo.maxLines)
@@ -343,5 +373,20 @@ export class CreateBoard extends PIXI.Container
         {
             this.lines[i].makeitVisible(false)
         }
+      }
+
+      blinkLines()
+      {
+        let index = 0;
+        clearInterval(this.blinkInterval);
+
+        this.blinkInterval = setInterval(()=>{
+        this.makelinesInvisible();
+        if(index === this.linesToBlink.length)
+        index = 0;
+        
+        this.lines[this.linesToBlink[index]].blink() 
+        index ++;
+        },1500)
       }
 }

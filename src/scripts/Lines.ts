@@ -2,6 +2,7 @@ import { Graphics, Sprite } from "pixi.js";
 import { boardConfigVar, boardConfig } from './Globals';
 import { log } from "console";
 import { Button } from "./Button";
+import { Easing, Tween } from "@tweenjs/tween.js";
 
 export class Lines extends Graphics{
  
@@ -10,6 +11,7 @@ export class Lines extends Graphics{
     moveLine !: Graphics;
     colorCode : number = 0x000000;
     side : boolean = false;
+    blinkTween: any;
 
     
 
@@ -23,7 +25,7 @@ export class Lines extends Graphics{
         this.lineG = new Graphics;
         this.lineG.beginFill(this.colorCode, 1);
         this.lineG.lineStyle(2, 0xFEEB77, 1);
-        this.lineG.drawCircle(0,0,20);
+        this.lineG.drawCircle(0,0,15);
         this.lineG.endFill();
 
         this.addChild(this.lineG);
@@ -45,21 +47,41 @@ export class Lines extends Graphics{
         const button = new Graphics;
         button.lineStyle(10, this.colorCode, 1,0.5);
         button.zIndex = 0;
-        
+        let offset = 0;
         for(let i = 0 ; i < line.length ; i++)
         {
-        // console.log( "LinePos: " +  (line[i].y  + boardConfigVar.boardBoxHeight/2));
-        // console.log( "GraphicPos: " + Math.abs(this.lineG.position.y ));
-        // console.log( "rightPos: " +  ((line[i].y  + boardConfigVar.boardBoxHeight/2) - (this.lineG.position.y ) ));
-        // console.log( this.lineG.position.y - (line[i].y + boardConfigVar.boardBoxHeight/2));
-        const rightPos = (line[i].y) - this.lineG.position.y;
 
-        button.lineTo( (line[i].x + 12) - this.lineG.position.x , rightPos);
-        button.moveTo( (line[i].x + 12) - this.lineG.position.x , rightPos);
+        const rightPos = (line[i].y) - this.lineG.position.y;
+        if(i == 0)
+        {
+            offset = rightPos;
+        }
+
+        button.lineTo( (line[i].x + 12) - this.lineG.position.x , rightPos-offset);
+        button.moveTo( (line[i].x + 12) - this.lineG.position.x , rightPos-offset);
         }
         this.lineG.addChild(button);
     }
 
-    makeitVisible(visible : boolean ){this.visible = visible;}
+    makeitVisible(visible : boolean )
+    {
+        if(!visible)
+        {
+            if(this.blinkTween)
+            this.blinkTween.stop();
+        }
+        this.visible = visible;
+    }
+
+    blink()
+    {
+        this.visible = true;
+        this.blinkTween = new Tween(this.lineG)
+        .to({alpha : 0.01},500)
+        .easing(Easing.Elastic.InOut)
+        .repeat(1)
+        .yoyo(true)
+        .start();
+    }
    
 }
