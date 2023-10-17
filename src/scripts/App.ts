@@ -94,18 +94,18 @@ export class App {
 			});
 		});
 	
-	//    const cookieValue =  getCookie("userName");
-	//    const tokenValue =  getCookie("userToken");
+	   const cookieValue =  getCookie("userName");
+	   const tokenValue =  getCookie("userToken");
 
-	//    if(cookieValue)
-	//    {
-	// 	   cookieValues.userName = cookieValue;
-	//    }
-	//    if(tokenValue)
-	//    {
-	// 	cookieValues.token = tokenValue;
+	   if(cookieValue)
+	   {
+		   cookieValues.userName = cookieValue;
+	   }
+	   if(tokenValue)
+	   {
+		cookieValues.token = tokenValue;
 
-	//    }
+	   }
 
 		this.tabChange();
 		document.body.appendChild(this.app.view);
