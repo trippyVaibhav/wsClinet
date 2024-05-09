@@ -17,30 +17,20 @@ export abstract class Scene {
 
     constructor() {
         this.sceneContainer = new Container();
-
- 
-        
-       
-        
+        // if (typeof mainBackgroundColor === "number") {
+            this.mainBackground = new BackgroundGraphic(config.logicalWidth, config.logicalHeight, this.fullBackground);
+            
+            // } 
+            // else {
+                // this.mainBackground = new BackgroundSprite(Globals.resources.backGround.texture, config.logicalWidth, config.logicalHeight);
+                this.addChildToFullScene(this.mainBackground);
+        // }
 
         this.mainContainer = new Container();
 
         this.resetMainContainer();
 
         this.sceneContainer.addChild(this.mainContainer);
-
-
-
-        // if (typeof mainBackgroundColor === "number") {
-            // this.mainBackground = new BackgroundGraphic(config.logicalWidth, config.logicalHeight, mainBackgroundColor);
-            
-            // } 
-            // else {
-                this.mainBackground = new BackgroundSprite(Globals.resources.backGround.texture, config.logicalWidth, config.logicalHeight);
-                this.addChildToFullScene(this.mainBackground);
-        // }
-
-
 
         // const mask = new Graphics();
         // mask.beginFill(0xffffff);
